@@ -9,14 +9,32 @@ namespace Rlib = raylib;
 
 class Player {
   private:
+    using Direction = Orientation::Direction;
+    using Axis = Orientation::Axis;
+
     Rlib::Rectangle m_hitbox{};
     MYSETTER(const Rlib::Rectangle, hitbox, m_hitbox);
 
-    void correct_x(const Rlib::Rectangle& bounds) {
-        if (m_hitbox.x + m_hitbox.width > bounds.x + bounds.width)
-            m_hitbox.x = bounds.x + bounds.width - m_hitbox.width;
-        else if (m_hitbox.x < bounds.x)
-            m_hitbox.x = bounds.x;
+    void correct_position(const Rlib::Rectangle& bounds, const Axis axis) {
+        switch (axis) {
+            using enum Axis;
+        case HORIZONTAL:
+            if (m_hitbox.x < bounds.x)
+                m_hitbox.x = bounds.x;
+            else if (m_hitbox.x + m_hitbox.width > bounds.x + bounds.width)
+                m_hitbox.x = bounds.x + bounds.width - m_hitbox.width;
+            break;
+
+        case VERTICAL:
+            if (m_hitbox.y < bounds.y)
+                m_hitbox.y = bounds.y;
+            else if (m_hitbox.y + m_hitbox.height > bounds.y + bounds.height)
+                m_hitbox.y = bounds.y + bounds.height - m_hitbox.height;
+            break;
+
+        default:
+            break;
+        }
     };
 
   public:
@@ -36,7 +54,8 @@ class Player {
     void update(const Rlib::Rectangle& bounds) {
         m_hitbox.y = bounds.y + bounds.height - m_hitbox.height - 30;
 
-        this->correct_x(bounds);
+        this->correct_position(bounds, Axis::HORIZONTAL);
+        this->correct_position(bounds, Axis::VERTICAL);
     };
 
     void move(const Direction direction, const Rlib::Rectangle& bounds,
@@ -49,13 +68,13 @@ class Player {
 
         case LEFT:
             m_hitbox.x -= speed * dt;
-            this->correct_x(bounds);
+            this->correct_position(bounds, Axis::HORIZONTAL);
 
             break;
 
         case RIGHT:
             m_hitbox.x += speed * dt;
-            this->correct_x(bounds);
+            this->correct_position(bounds, Axis::HORIZONTAL);
 
             break;
 
