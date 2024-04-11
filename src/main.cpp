@@ -1,3 +1,4 @@
+#include "Game.h"
 #include <cstdlib>
 #include <raylib-cpp.hpp>
 #include <string>
@@ -8,7 +9,8 @@ namespace Rlib = raylib;
 int main() {
     // Initialization
     //--------------------------------------------------------------------------------------
-    Rlib::Window window{800, 400, "Template"};
+    Rlib::Window window{800, 400, "SpaceRecycle"};
+    Game game{};
 
     // FPS cap
     window.SetTargetFPS(60);
@@ -34,16 +36,17 @@ int main() {
         // Update
         //----------------------------------------------------------------------------------
         {
-            //
+            game.set_bg_rec({0, 0, static_cast<float>(window.GetWidth() * .70),
+                             static_cast<float>(window.GetHeight())});
         }
         //----------------------------------------------------------------------------------
 
         // Draw
         //----------------------------------------------------------------------------------
         {
-            BeginDrawing();
+            window.BeginDrawing();
 
-            ClearBackground(RAYWHITE);
+            window.ClearBackground(RAYWHITE);
 
             if (exit_request) {
                 DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);
@@ -51,10 +54,9 @@ int main() {
                          WHITE);
             }
 
-            DrawText("Template", GetRenderWidth() / 2, GetRenderHeight() / 2,
-                     40, LIGHTGRAY);
+            game.get_bg_rec().Draw(BLUE);
 
-            EndDrawing();
+            window.EndDrawing();
         }
         //----------------------------------------------------------------------------------
     }
