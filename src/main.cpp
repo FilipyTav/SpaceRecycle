@@ -36,8 +36,8 @@ int main() {
         // Update
         //----------------------------------------------------------------------------------
         {
-            game.set_bg_rec({0, 0, static_cast<float>(window.GetWidth() * .70),
-                             static_cast<float>(window.GetHeight())});
+            //
+            game.update(window);
         }
         //----------------------------------------------------------------------------------
 

@@ -20,4 +20,6 @@ class Game {
     ~Game() = default;
 
     MYGETTERSETTER(const Rlib::Rectangle&, bg_rec, m_bg_rec);
+
+    void update(const Rlib::Window& window);
 };
