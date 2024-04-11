@@ -51,10 +51,11 @@ int main() {
         {
             dt = GetFrameTime();
 
-            spaceship.handle_input(dt);
+            if (window.IsResized())
+                game.update(window);
+            spaceship.update(game.get_bg_rec());
 
-            game.update(window);
-            spaceship.update(game);
+            spaceship.handle_input(game.get_bg_rec(), dt);
         }
         //----------------------------------------------------------------------------------
 

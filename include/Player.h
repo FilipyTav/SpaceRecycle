@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Game.h"
 #include "Utils/Defines.h"
 #include "Utils/Globals.h"
 #include <raylib-cpp.hpp>
@@ -12,6 +11,13 @@ class Player {
   private:
     Rlib::Rectangle m_hitbox{};
     MYSETTER(const Rlib::Rectangle, hitbox, m_hitbox);
+
+    void correct_x(const Rlib::Rectangle& bounds) {
+        if (m_hitbox.x + m_hitbox.width > bounds.x + bounds.width)
+            m_hitbox.x = bounds.x + bounds.width - m_hitbox.width;
+        else if (m_hitbox.x < bounds.x)
+            m_hitbox.x = bounds.x;
+    };
 
   public:
     Player(const Rlib::Rectangle& hitbox, const float speed = 400)
@@ -27,12 +33,14 @@ class Player {
 
     MYGETTER(const Rlib::Rectangle, hitbox, m_hitbox);
 
-    void update(const Game& game) {
-        m_hitbox.y = game.get_bg_rec().y + game.get_bg_rec().height -
-                     m_hitbox.height - 30;
+    void update(const Rlib::Rectangle& bounds) {
+        m_hitbox.y = bounds.y + bounds.height - m_hitbox.height - 30;
+
+        this->correct_x(bounds);
     };
 
-    void move(const Direction direction, const float dt = 0) {
+    void move(const Direction direction, const Rlib::Rectangle& bounds,
+              const float dt = 0) {
         switch (direction) {
             using enum Direction;
         case UP:
@@ -40,13 +48,15 @@ class Player {
             break;
 
         case LEFT:
-            if (m_hitbox.x > 0)
-                m_hitbox.x -= speed * dt;
+            m_hitbox.x -= speed * dt;
+            this->correct_x(bounds);
+
             break;
 
         case RIGHT:
-            if (m_hitbox.x + m_hitbox.width < 600)
-                m_hitbox.x += speed * dt;
+            m_hitbox.x += speed * dt;
+            this->correct_x(bounds);
+
             break;
 
         default:
@@ -54,11 +64,11 @@ class Player {
         }
     };
 
-    void handle_input(const float dt) {
+    void handle_input(const Rlib::Rectangle& bounds, const float dt) {
         if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT))
-            this->move(Direction::LEFT, dt);
+            this->move(Direction::LEFT, bounds, dt);
 
         if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT))
-            this->move(Direction::RIGHT, dt);
+            this->move(Direction::RIGHT, bounds, dt);
     };
 };
