@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Utils/Defines.h"
-#include "raylib-cpp-utils.hpp"
 #include <raylib-cpp.hpp>
 
 namespace Rlib = raylib;

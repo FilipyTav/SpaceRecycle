@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "Player.h"
 #include <cstdlib>
 #include <raylib-cpp.hpp>
 #include <string>
@@ -11,6 +12,11 @@ int main() {
     //--------------------------------------------------------------------------------------
     Rlib::Window window{800, 400, "SpaceRecycle"};
     Game game{};
+    game.update(window);
+
+    Player spaceship{
+        {game.get_bg_rec().x + (game.get_bg_rec().width / 2) - 20 / 2.f,
+         game.get_bg_rec().y + game.get_bg_rec().height - 20 / 2.f, 20, 20}};
 
     // FPS cap
     window.SetTargetFPS(60);
@@ -36,8 +42,8 @@ int main() {
         // Update
         //----------------------------------------------------------------------------------
         {
-            //
             game.update(window);
+            spaceship.update(game);
         }
         //----------------------------------------------------------------------------------
 
@@ -55,6 +61,7 @@ int main() {
             }
 
             game.get_bg_rec().Draw(BLUE);
+            spaceship.get_hitbox().Draw(RED);
 
             window.EndDrawing();
         }
