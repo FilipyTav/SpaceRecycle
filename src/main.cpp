@@ -11,17 +11,24 @@ int main() {
     // Initialization
     //--------------------------------------------------------------------------------------
     Rlib::Window window{800, 400, "SpaceRecycle"};
+
     Game game{};
     game.update(window);
 
-    Player spaceship{
-        {game.get_bg_rec().x + (game.get_bg_rec().width / 2) - 20 / 2.f,
-         game.get_bg_rec().y + game.get_bg_rec().height - 20 / 2.f, 20, 20}};
+    float spaceship_w{50};
+    Player spaceship{{game.get_bg_rec().x + (game.get_bg_rec().width / 2) -
+                          spaceship_w / 2.f,
+                      game.get_bg_rec().y + game.get_bg_rec().height -
+                          (spaceship_w * 1.5f) / 2.f,
+                      spaceship_w, spaceship_w * 1.5f}};
 
     // FPS cap
     window.SetTargetFPS(60);
 
     window.SetExitKey(KEY_Q);
+
+    // Delta time
+    float dt{};
     //--------------------------------------------------------------------------------------
 
     // Game loop switch flag
@@ -42,6 +49,10 @@ int main() {
         // Update
         //----------------------------------------------------------------------------------
         {
+            dt = GetFrameTime();
+
+            spaceship.handle_input(dt);
+
             game.update(window);
             spaceship.update(game);
         }
@@ -54,14 +65,14 @@ int main() {
 
             window.ClearBackground(RAYWHITE);
 
+            game.get_bg_rec().Draw(BLUE);
+            spaceship.get_hitbox().Draw(RED);
+
             if (exit_request) {
                 DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);
                 DrawText("Are you sure you want to exit? [Y/N]", 40, 180, 30,
                          WHITE);
             }
-
-            game.get_bg_rec().Draw(BLUE);
-            spaceship.get_hitbox().Draw(RED);
 
             window.EndDrawing();
         }

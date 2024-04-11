@@ -2,6 +2,7 @@
 
 #include "Utils/Defines.h"
 #include <raylib-cpp.hpp>
+#include <raylib.h>
 
 namespace Rlib = raylib;
 
