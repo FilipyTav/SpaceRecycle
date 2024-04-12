@@ -5,8 +5,6 @@
 #include <raylib-cpp.hpp>
 #include <raylib.h>
 
-namespace Rlib = raylib;
-
 class Player {
   private:
     using Direction = Orientation::Direction;

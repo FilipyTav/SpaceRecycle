@@ -1,24 +1,13 @@
 #pragma once
 
+#include "Utils/Globals.h"
 #include "Utils/Random.h"
 #include <raylib-cpp.hpp>
 #include <unordered_map>
 
-namespace Rlib = raylib;
-
 class Trash {
-  public:
-    enum class Type {
-        PAPER,   // Blue
-        GLASS,   // Green
-        PLASTIC, // Red
-        METAL,   // Yellow
-        ORGANIC, // Brown
-
-        MAX_TYPES
-    };
-
   private:
+    using Type = TrashInfo::Type;
     Type m_type{};
 
     int y_speed{};
@@ -28,20 +17,13 @@ class Trash {
 
     Rlib::Rectangle m_hitbox{};
 
-    using enum Type;
-    std::unordered_map<Type, Rlib::Color> colors_map{{PAPER, BLUE},
-                                                     {GLASS, GREEN},
-                                                     {PLASTIC, RED},
-                                                     {METAL, YELLOW},
-                                                     {ORGANIC, BROWN}};
-
   public:
     Trash(const Type type, const int speed) : m_type{type}, y_speed{speed} {
-        m_color = colors_map[type];
+        m_color = TrashInfo::colors_map[type];
     };
     Trash(const Type type, const int speed, const Rlib::Rectangle& bounds)
         : m_type{type}, y_speed{speed}, m_hitbox{bounds} {
-        m_color = colors_map[type];
+        m_color = TrashInfo::colors_map[type];
     };
     Trash(Trash&&) = default;
     Trash(const Trash&) = default;
