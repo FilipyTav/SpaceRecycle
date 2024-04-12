@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Player.h"
+#include "Trash.h"
 #include <cstdlib>
 #include <raylib-cpp.hpp>
 #include <string>
