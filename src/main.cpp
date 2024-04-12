@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "Player.h"
 #include "Trash.h"
+#include "Utils/Globals.h"
 #include <cstdlib>
 #include <raylib-cpp.hpp>
 #include <string>
@@ -21,7 +22,8 @@ int main() {
                           spaceship_w / 2.f,
                       game.get_bg_rec().y + game.get_bg_rec().height -
                           (spaceship_w * 1.5f) / 2.f,
-                      spaceship_w, spaceship_w * 1.5f}};
+                      spaceship_w, spaceship_w * 1.5f},
+                     TrashInfo::Type::METAL};
 
     Trash tt{Trash::create_random(game.get_bg_rec())};
 
@@ -76,7 +78,7 @@ int main() {
             window.ClearBackground(RAYWHITE);
 
             game.get_bg_rec().Draw(BLACK);
-            spaceship.get_hitbox().Draw(RED);
+            spaceship.draw();
 
             tt.draw();
 

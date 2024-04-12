@@ -10,6 +10,9 @@ class Player {
     using Direction = Orientation::Direction;
     using Axis = Orientation::Axis;
 
+    TrashInfo::Type m_type{};
+    Rlib::Color m_color{};
+
     Rlib::Rectangle m_hitbox{};
     MYSETTER(const Rlib::Rectangle, hitbox, m_hitbox);
 
@@ -36,8 +39,11 @@ class Player {
     };
 
   public:
-    Player(const Rlib::Rectangle& hitbox, const float speed = 400)
-        : m_hitbox{hitbox}, speed{speed} {};
+    Player(const Rlib::Rectangle& hitbox, const TrashInfo::Type type,
+           const float speed = 400)
+        : m_hitbox{hitbox}, speed{speed}, m_type{type} {
+        m_color = TrashInfo::colors_map[type];
+    };
     Player(Player&&) = default;
     Player(const Player&) = default;
     Player& operator=(Player&&) = default;
@@ -82,11 +88,49 @@ class Player {
         }
     };
 
+    void draw() { m_hitbox.Draw(m_color); };
+    void set_type(const TrashInfo::Type type) {
+        m_type = type;
+        m_color = TrashInfo::colors_map[type];
+    };
+
     void handle_input(const Rlib::Rectangle& bounds, const float dt) {
         if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT))
             this->move(Direction::LEFT, bounds, dt);
 
         if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT))
             this->move(Direction::RIGHT, bounds, dt);
+
+        int key = GetKeyPressed();
+
+        switch (key) {
+        case KEY_ONE:
+        case KEY_KP_1:
+            this->set_type(TrashInfo::Type::PAPER);
+            break;
+
+        case KEY_TWO:
+        case KEY_KP_2:
+            this->set_type(TrashInfo::Type::GLASS);
+            break;
+
+        case KEY_THREE:
+        case KEY_KP_3:
+            this->set_type(TrashInfo::Type::PLASTIC);
+            break;
+
+        case KEY_FOUR:
+        case KEY_KP_4:
+            this->set_type(TrashInfo::Type::METAL);
+            break;
+
+        case KEY_FIVE:
+        case KEY_KP_5:
+            this->set_type(TrashInfo::Type::ORGANIC);
+            break;
+
+        default:
+            break;
+        }
     };
 };
