@@ -23,6 +23,8 @@ int main() {
                           (spaceship_w * 1.5f) / 2.f,
                       spaceship_w, spaceship_w * 1.5f}};
 
+    Trash tt{Trash::create_random(game.get_bg_rec())};
+
     // FPS cap
     window.SetTargetFPS(60);
 
@@ -47,13 +49,19 @@ int main() {
                 exit_request = false;
         }
 
+        if (IsKeyPressed(KEY_SPACE))
+            tt = Trash::create_random(game.get_bg_rec());
+
         // Update
         //----------------------------------------------------------------------------------
         {
             dt = GetFrameTime();
 
+            tt.update(dt, game.get_bg_rec());
+
             if (window.IsResized())
                 game.update(window);
+
             spaceship.update(game.get_bg_rec());
 
             spaceship.handle_input(game.get_bg_rec(), dt);
@@ -67,8 +75,10 @@ int main() {
 
             window.ClearBackground(RAYWHITE);
 
-            game.get_bg_rec().Draw(BLUE);
+            game.get_bg_rec().Draw(BLACK);
             spaceship.get_hitbox().Draw(RED);
+
+            tt.draw();
 
             if (exit_request) {
                 DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);

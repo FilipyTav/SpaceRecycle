@@ -52,6 +52,7 @@ class Player {
     MYGETTER(const Rlib::Rectangle, hitbox, m_hitbox);
 
     void update(const Rlib::Rectangle& bounds) {
+        // Constant height
         m_hitbox.y = bounds.y + bounds.height - m_hitbox.height - 30;
 
         this->correct_position(bounds, Axis::HORIZONTAL);
