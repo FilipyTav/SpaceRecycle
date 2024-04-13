@@ -45,5 +45,5 @@ class Trash {
     static Trash create_random(const Rlib::Rectangle& bounds);
 
     void correct_position(const Orientation::Axis axis,
-                          const Rlib::Rectangle& bounds){};
+                          const Rlib::Rectangle& bounds);
 };

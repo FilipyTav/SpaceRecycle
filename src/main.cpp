@@ -58,8 +58,11 @@ int main() {
         {
             dt = GetFrameTime();
 
-            if (window.IsResized())
+            if (window.IsResized()) {
                 game.update_size(window);
+                tt.correct_position(Orientation::Axis::HORIZONTAL,
+                                    game.get_bg_rec());
+            }
 
             spaceship.update(game.get_bg_rec());
 

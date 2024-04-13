@@ -7,8 +7,8 @@ namespace Rlib = raylib;
 
 template <typename T> //
 struct Shy {
-    T x;
-    T y;
+    T x{};
+    T y{};
 };
 
 namespace Orientation {
