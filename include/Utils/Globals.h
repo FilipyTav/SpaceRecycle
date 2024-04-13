@@ -5,6 +5,12 @@
 
 namespace Rlib = raylib;
 
+template <typename T> //
+struct Shy {
+    T x;
+    T y;
+};
+
 namespace Orientation {
 enum class Direction { UP, DOWN, LEFT, RIGHT, MAX_DIRECTIONS };
 enum class Axis { HORIZONTAL, VERTICAL, MAX_AXES };
@@ -28,3 +34,18 @@ inline std::unordered_map<Type, Rlib::Color> colors_map{{PAPER, BLUE},
                                                         {METAL, YELLOW},
                                                         {ORGANIC, BROWN}};
 } // namespace TrashInfo
+
+namespace Config {
+namespace General {
+inline const std::string root_path =
+    std::string(GetApplicationDirectory()) + "../";
+}
+
+namespace Trash {
+// How many can be in the screen at the same time
+inline int max{10};
+
+// In seconds
+inline int delay{1};
+} // namespace Trash
+} // namespace Config

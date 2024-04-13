@@ -6,7 +6,6 @@
 #include <raylib-cpp.hpp>
 #include <string>
 
-const std::string root_path = std::string(GetApplicationDirectory()) + "../";
 namespace Rlib = raylib;
 
 int main() {
@@ -15,7 +14,7 @@ int main() {
     Rlib::Window window{800, 400, "SpaceRecycle"};
 
     Game game{};
-    game.update(window);
+    game.update_size(window);
 
     float spaceship_w{50};
     Player spaceship{{game.get_bg_rec().x + (game.get_bg_rec().width / 2) -
@@ -25,12 +24,12 @@ int main() {
                       spaceship_w, spaceship_w * 1.5f},
                      TrashInfo::Type::METAL};
 
-    Trash tt{Trash::create_random(game.get_bg_rec())};
-
     // FPS cap
     window.SetTargetFPS(60);
 
     window.SetExitKey(KEY_Q);
+
+    Trash tt{Trash::create_random(game.get_bg_rec())};
 
     // Delta time
     float dt{};
@@ -59,14 +58,13 @@ int main() {
         {
             dt = GetFrameTime();
 
-            tt.update(dt, game.get_bg_rec());
-
             if (window.IsResized())
-                game.update(window);
+                game.update_size(window);
 
             spaceship.update(game.get_bg_rec());
 
             spaceship.handle_input(game.get_bg_rec(), dt);
+            tt.update(dt, game.get_bg_rec());
         }
         //----------------------------------------------------------------------------------
 

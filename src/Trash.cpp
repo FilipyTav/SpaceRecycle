@@ -1,13 +1,14 @@
 #include "Trash.h"
+#include <iostream>
 
 /* ---------- Public methods ---------- */
 Trash::Trash(const Type type, const int speed) : m_type{type}, y_speed{speed} {
     m_color = TrashInfo::colors_map[type];
 };
 
-Trash::Trash(const Type type, const int speed, const Rlib::Rectangle& bounds)
-    : m_type{type}, y_speed{speed}, m_hitbox{bounds} {
-    m_color = TrashInfo::colors_map[type];
+Trash::Trash(const Type type, const int speed, const Rlib::Rectangle& hitbox)
+    : Trash(type, speed) {
+    m_hitbox = hitbox;
 };
 
 void Trash::move(const float dt) { m_hitbox.y += y_speed * dt; };

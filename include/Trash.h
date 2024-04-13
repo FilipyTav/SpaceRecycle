@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Utils/Defines.h"
 #include "Utils/Globals.h"
 #include "Utils/Random.h"
 #include <raylib-cpp.hpp>
@@ -17,9 +18,15 @@ class Trash {
 
     Rlib::Rectangle m_hitbox{};
 
+    friend class Game;
+    MYGETTERSETTER(const Rlib::Rectangle&, hitbox, m_hitbox);
+
+    // In percentage from the start of the container
+    Shy<float> m_position{};
+
   public:
     Trash(const Type type, const int speed);
-    Trash(const Type type, const int speed, const Rlib::Rectangle& bounds);
+    Trash(const Type type, const int speed, const Rlib::Rectangle& hitbox);
     Trash(Trash&&) = default;
     Trash(const Trash&) = default;
     Trash& operator=(Trash&&) = default;
@@ -33,5 +40,10 @@ class Trash {
 
     void draw();
 
+    // bounds: the rectangle that contains the object - used to determine the
+    // position of the hitbox
     static Trash create_random(const Rlib::Rectangle& bounds);
+
+    void correct_position(const Orientation::Axis axis,
+                          const Rlib::Rectangle& bounds){};
 };
