@@ -25,7 +25,7 @@ class Trash {
     Shy<float> m_position{};
 
   public:
-    Trash(const Type type, const int speed);
+    Trash(const Type type, const int speed = 300);
     Trash(const Type type, const int speed, const Rlib::Rectangle& hitbox);
     Trash(Trash&&) = default;
     Trash(const Trash&) = default;

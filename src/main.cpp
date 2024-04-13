@@ -15,6 +15,7 @@ int main() {
 
     Game game{};
     game.update_size(window);
+    game.reset_enemies(1);
 
     float spaceship_w{50};
     Player spaceship{{game.get_bg_rec().x + (game.get_bg_rec().width / 2) -
@@ -27,9 +28,9 @@ int main() {
     // FPS cap
     window.SetTargetFPS(60);
 
-    window.SetExitKey(KEY_Q);
+    // TODO: create a timer
 
-    Trash tt{Trash::create_random(game.get_bg_rec())};
+    window.SetExitKey(KEY_Q);
 
     // Delta time
     float dt{};
@@ -51,7 +52,7 @@ int main() {
         }
 
         if (IsKeyPressed(KEY_SPACE))
-            tt = Trash::create_random(game.get_bg_rec());
+            game.reset_enemies(1);
 
         // Update
         //----------------------------------------------------------------------------------
@@ -60,14 +61,13 @@ int main() {
 
             if (window.IsResized()) {
                 game.update_size(window);
-                tt.correct_position(Orientation::Axis::HORIZONTAL,
-                                    game.get_bg_rec());
             }
+
+            game.update(dt);
 
             spaceship.update(game.get_bg_rec());
 
             spaceship.handle_input(game.get_bg_rec(), dt);
-            tt.update(dt, game.get_bg_rec());
         }
         //----------------------------------------------------------------------------------
 
@@ -78,10 +78,8 @@ int main() {
 
             window.ClearBackground(RAYWHITE);
 
-            game.get_bg_rec().Draw(BLACK);
+            game.draw();
             spaceship.draw();
-
-            tt.draw();
 
             if (exit_request) {
                 DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);

@@ -45,7 +45,7 @@ namespace Trash {
 // How many can be in the screen at the same time
 inline int max{10};
 
-// In seconds
+// Delay between consecutive trashes falling - in seconds
 inline int delay{1};
 } // namespace Trash
 } // namespace Config

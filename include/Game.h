@@ -20,12 +20,7 @@ class Game {
     std::vector<Trash> m_enemies{};
 
   public:
-    Game(){
-        // m_enemies.resize(Config::Trash::max, Trash::create_random(m_bg_rec));
-        //
-        // for (const Trash& a : m_enemies) {
-        // }
-    };
+    Game() = default;
     Game(Game&&) = default;
     Game(const Game&) = default;
     Game& operator=(Game&&) = default;
@@ -38,4 +33,23 @@ class Game {
     bool did_win() { return m_won; };
 
     void update_size(const Rlib::Window& window);
+
+    void update(const float dt) {
+        for (auto& enemy : m_enemies) {
+            enemy.update(dt, m_bg_rec);
+        }
+    };
+
+    void reset_enemies(const int amount) {
+        m_enemies.resize(amount, {TrashInfo::Type::MAX_TYPES});
+        m_enemies[0] = Trash::create_random(m_bg_rec);
+    };
+
+    void draw() {
+        m_bg_rec.Draw(BLACK);
+
+        for (auto& enemy : m_enemies) {
+            enemy.draw();
+        }
+    };
 };
