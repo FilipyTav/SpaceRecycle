@@ -35,7 +35,7 @@ class Trash {
 
     void move(const float dt);
 
-    // Returns true if the hitbox hits the bottom of the screen
+    // Returns false if the hitbox gets out of bounds
     bool update(const float dt, const Rlib::Rectangle& bounds);
 
     void draw();

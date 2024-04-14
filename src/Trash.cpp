@@ -19,10 +19,11 @@ bool Trash::update(const float dt, const Rlib::Rectangle& bounds) {
 
     m_position.x = (m_hitbox.x - bounds.x) / (bounds.width - m_hitbox.width);
 
-    if (m_hitbox.y + m_hitbox.height >= bounds.y + bounds.height)
-        return true;
+    if (m_hitbox.y + m_hitbox.height >= bounds.y + bounds.height ||
+        m_hitbox.x + m_hitbox.width >= bounds.x + bounds.width)
+        return false;
 
-    return false;
+    return true;
 };
 
 void Trash::correct_position(const Orientation::Axis axis,
@@ -43,7 +44,10 @@ void Trash::correct_position(const Orientation::Axis axis,
     }
 };
 
-void Trash::draw() { m_hitbox.Draw(m_color); };
+void Trash::draw() {
+    if (m_type != Type::MAX_TYPES)
+        m_hitbox.Draw(m_color);
+};
 
 Trash Trash::create_random(const Rlib::Rectangle& bounds) {
     using enum Type;

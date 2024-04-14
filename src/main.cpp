@@ -28,8 +28,6 @@ int main() {
     // FPS cap
     window.SetTargetFPS(60);
 
-    // TODO: create a timer
-
     window.SetExitKey(KEY_Q);
 
     // Delta time
