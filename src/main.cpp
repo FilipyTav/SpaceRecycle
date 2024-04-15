@@ -39,14 +39,18 @@ int main() {
     bool exit_request{false};
 
     while (running) {
-        if (window.ShouldClose())
+        if (window.ShouldClose()) {
             exit_request = true;
+            game.set_paused(true);
+        }
 
         if (exit_request) {
             if (IsKeyPressed(KEY_Y))
                 running = false;
-            else if (IsKeyPressed(KEY_N))
+            else if (IsKeyPressed(KEY_N)) {
                 exit_request = false;
+                game.set_paused(false);
+            }
         }
 
         if (IsKeyPressed(KEY_SPACE))
@@ -55,17 +59,19 @@ int main() {
         // Update
         //----------------------------------------------------------------------------------
         {
-            dt = GetFrameTime();
-
             if (window.IsResized()) {
                 game.update_size(window);
             }
 
-            game.update(dt);
+            if (!game.is_paused()) {
+                dt = GetFrameTime();
 
-            spaceship.update(game.get_bg_rec());
+                game.update(dt);
 
-            spaceship.handle_input(game.get_bg_rec(), dt);
+                spaceship.update(game.get_bg_rec());
+
+                spaceship.handle_input(game.get_bg_rec(), dt);
+            }
         }
         //----------------------------------------------------------------------------------
 

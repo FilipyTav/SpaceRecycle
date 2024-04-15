@@ -13,19 +13,22 @@ namespace Rlib = raylib;
 
 class Game {
   private:
+    // The areas on the screen
     Rlib::Rectangle m_bg_rec{};
     Rlib::Rectangle m_score_rec{};
 
+    // State
     bool m_lost{};
     bool m_won{};
 
+    // If paused
+    bool m_paused{false};
+
+    // All the rendered enemies
     std::vector<Trash> m_enemies{};
 
   public:
-    Game() {
-        // 1 seconds between enemy spawns in the beginning
-        enemy_spaw_t.start(1);
-    };
+    Game();
     Game(Game&&) = default;
     Game(const Game&) = default;
     Game& operator=(Game&&) = default;
@@ -34,42 +37,21 @@ class Game {
 
     MYGETTERSETTER(const Rlib::Rectangle&, bg_rec, m_bg_rec);
 
+    MYSETTER(const bool, paused, m_paused);
+
+    const bool is_paused();
+
     // Time between enemy spawns
     Timer enemy_spaw_t{1};
 
-    bool did_lose() { return m_lost; };
-    bool did_win() { return m_won; };
+    bool did_lose();
+    bool did_win();
 
     void update_size(const Rlib::Window& window);
 
-    void update(const float dt) {
-        if (enemy_spaw_t.is_done()) {
-            m_enemies.push_back(Trash::create_random(m_bg_rec));
+    void update(const float dt);
 
-            enemy_spaw_t.reset();
-        }
+    void reset_enemies(const int amount);
 
-        for (int i = 0; i < m_enemies.size(); i++) {
-            if (!m_enemies[i].update(dt, m_bg_rec)) {
-                m_enemies.erase(m_enemies.begin() + i);
-            };
-        }
-
-        std::cout << "Enemies: " << m_enemies.size() << '\n';
-    };
-
-    void reset_enemies(const int amount) {
-        m_enemies.resize(amount, {TrashInfo::Type::MAX_TYPES});
-        m_enemies[0] = Trash::create_random(m_bg_rec);
-
-        enemy_spaw_t.reset();
-    };
-
-    void draw() {
-        m_bg_rec.Draw(BLACK);
-
-        for (auto& enemy : m_enemies) {
-            enemy.draw();
-        }
-    };
+    void draw();
 };
