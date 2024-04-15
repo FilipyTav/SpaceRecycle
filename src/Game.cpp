@@ -1,5 +1,7 @@
 #include "Game.h"
 #include "Utils/Globals.h"
+#include <iostream>
+#include <raylib.h>
 
 Game::Game() {
     // 1 seconds between enemy spawns in the beginning
@@ -20,7 +22,7 @@ bool Game::did_lose() { return m_lost; };
 
 bool Game::did_win() { return m_won; };
 
-void Game::update(const float dt) {
+void Game::update(const float dt, Player& player) {
     if (enemy_spaw_t.is_done()) {
         m_enemies.push_back(Trash::create_random(m_bg_rec));
 
@@ -28,9 +30,20 @@ void Game::update(const float dt) {
     }
 
     for (int i = 0; i < m_enemies.size(); i++) {
-        if (!m_enemies[i].update(dt, m_bg_rec)) {
+        auto& enemy{m_enemies[i]};
+
+        if (!enemy.update(dt, m_bg_rec)) {
             m_enemies.erase(m_enemies.begin() + i);
-        };
+        } else if (player.is_enemy_colliding(enemy.get_hitbox())) {
+            if (player.is_same_type(enemy)) {
+                player.modify_points(Math::Operations::ADD, enemy.get_value());
+            }
+
+            // It does not work if those 2 lines are inverted.
+            // Why?
+            // enemy.set_visible(false);
+            m_enemies.erase(m_enemies.begin() + i);
+        }
     }
 
     std::cout << "Enemies: " << m_enemies.size() << '\n';

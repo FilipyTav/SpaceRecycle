@@ -33,6 +33,9 @@ inline std::unordered_map<Type, Rlib::Color> colors_map{{PAPER, BLUE},
                                                         {PLASTIC, RED},
                                                         {METAL, YELLOW},
                                                         {ORGANIC, BROWN}};
+
+inline std::unordered_map<Type, const int> values_map{
+    {PAPER, 1}, {GLASS, 5}, {PLASTIC, 10}, {METAL, 15}, {ORGANIC, 20}};
 } // namespace TrashInfo
 
 namespace Config {
@@ -49,3 +52,14 @@ inline int max{10};
 inline int delay{1};
 } // namespace Trash
 } // namespace Config
+
+namespace Math {
+enum class Operations {
+    ADD,
+    SUB,
+    MULT,
+    DIV,
+
+    MAX_OPERATIONS,
+};
+}

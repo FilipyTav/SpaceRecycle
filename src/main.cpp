@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <raylib-cpp.hpp>
 #include <raylib.h>
+#include <sstream>
 #include <string>
 
 namespace Rlib = raylib;
@@ -74,7 +75,7 @@ int main() {
             if (!game.is_paused()) {
                 dt = GetFrameTime();
 
-                game.update(dt);
+                game.update(dt, spaceship);
 
                 spaceship.update(game.get_bg_rec());
 
@@ -91,6 +92,11 @@ int main() {
             window.ClearBackground(RAYWHITE);
 
             game.draw();
+            std::stringstream a{"Points: "};
+            a << spaceship.get_points();
+
+            // DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);
+            // DrawText(a.str().c_str(), 40, 180, 30, WHITE);
             spaceship.draw();
 
             if (exit_request) {

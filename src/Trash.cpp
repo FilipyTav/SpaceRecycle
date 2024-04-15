@@ -1,10 +1,9 @@
 #include "Trash.h"
-#include <iomanip>
-#include <iostream>
 
 /* ---------- Public methods ---------- */
 Trash::Trash(const Type type, const int speed) : m_type{type}, y_speed{speed} {
     m_color = TrashInfo::colors_map[type];
+    m_value = TrashInfo::values_map[type];
 };
 
 Trash::Trash(const Type type, const int speed, const Rlib::Rectangle& hitbox)
@@ -45,7 +44,7 @@ void Trash::correct_position(const Orientation::Axis axis,
 };
 
 void Trash::draw() {
-    if (m_type != Type::MAX_TYPES)
+    if (m_type != Type::MAX_TYPES && m_visible)
         m_hitbox.Draw(m_color);
 };
 
@@ -54,7 +53,7 @@ Trash Trash::create_random(const Rlib::Rectangle& bounds) {
     constexpr int hitbox_size{100};
 
     return {static_cast<Type>(Random::get(0, static_cast<int>(MAX_TYPES) - 1)),
-            Random::get(100, 600),
+            Random::get(100, 400),
             {static_cast<float>(Random::get(
                  (int)bounds.x, bounds.x + bounds.width - hitbox_size)),
              0, hitbox_size, hitbox_size}};

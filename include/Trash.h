@@ -19,10 +19,15 @@ class Trash {
     Rlib::Rectangle m_hitbox{};
 
     friend class Game;
-    MYGETTERSETTER(const Rlib::Rectangle&, hitbox, m_hitbox);
+    MYSETTER(const Rlib::Rectangle&, hitbox, m_hitbox);
 
     // In percentage from the start of the container
     Shy<float> m_position{};
+
+    bool m_visible{true};
+
+    // How many points this is worth
+    int m_value{};
 
   public:
     Trash(const Type type, const int speed = 300);
@@ -32,6 +37,8 @@ class Trash {
     Trash& operator=(Trash&&) = default;
     Trash& operator=(const Trash&) = default;
     ~Trash() = default;
+
+    MYGETTER(const Rlib::Rectangle&, hitbox, m_hitbox);
 
     void move(const float dt);
 
@@ -46,4 +53,9 @@ class Trash {
 
     void correct_position(const Orientation::Axis axis,
                           const Rlib::Rectangle& bounds);
+
+    MYGETTER(const Type, type, m_type);
+    MYGETTERSETTER(const bool, visible, m_visible);
+
+    MYGETTER(const int, value, m_value);
 };

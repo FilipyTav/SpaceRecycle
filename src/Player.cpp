@@ -108,3 +108,27 @@ void Player::handle_input(const Rlib::Rectangle& bounds, const float dt) {
         break;
     }
 };
+
+void Player::modify_points(const Math::Operations op, const int amount) {
+    switch (op) {
+        using enum Math::Operations;
+    case ADD:
+        m_score += amount;
+        break;
+
+    case SUB:
+        m_score -= amount;
+        break;
+
+    case MULT:
+        m_score *= amount;
+        break;
+
+    case DIV:
+        m_score /= amount;
+        break;
+
+    default:
+        break;
+    }
+};

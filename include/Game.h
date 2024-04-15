@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Player.h"
 #include "Trash.h"
 #include "Utils/Defines.h"
 #include "Utils/Globals.h"
@@ -49,7 +50,7 @@ class Game {
 
     void update_size(const Rlib::Window& window);
 
-    void update(const float dt);
+    void update(const float dt, Player& player);
 
     void reset_enemies(const int amount);
 
