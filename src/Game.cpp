@@ -37,7 +37,11 @@ void Game::update(const float dt, Player& player) {
         } else if (player.is_enemy_colliding(enemy.get_hitbox())) {
             if (player.is_same_type(enemy)) {
                 player.modify_points(Math::Operations::ADD, enemy.get_value());
-            }
+            } else
+                player.modify_health(Math::Operations::SUB, 1);
+
+            if (!player.is_alive())
+                m_lost = true;
 
             // It does not work if those 2 lines are inverted.
             // Why?

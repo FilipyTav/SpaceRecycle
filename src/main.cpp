@@ -95,8 +95,8 @@ int main() {
             std::stringstream a{"Points: "};
             a << spaceship.get_points();
 
-            // DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);
-            // DrawText(a.str().c_str(), 40, 180, 30, WHITE);
+            DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);
+            DrawText(a.str().c_str(), 40, 180, 30, WHITE);
             spaceship.draw();
 
             if (exit_request) {

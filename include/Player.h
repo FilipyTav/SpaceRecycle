@@ -22,9 +22,11 @@ class Player {
 
     int m_score{0};
 
+    int m_health{};
+
   public:
     Player(const Rlib::Rectangle& hitbox, const TrashInfo::Type type,
-           const float speed = 400);
+           const float speed = 400, const int health = 3);
     Player(Player&&) = default;
     Player(const Player&) = default;
     Player& operator=(Player&&) = default;
@@ -64,4 +66,7 @@ class Player {
     MYGETTER(const int, points, m_score);
 
     void modify_points(const Math::Operations op, const int amount);
+    void modify_health(const Math::Operations op, const int amount);
+
+    bool is_alive();
 };

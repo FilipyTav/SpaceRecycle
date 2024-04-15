@@ -26,8 +26,8 @@ void Player::correct_position(const Rlib::Rectangle& bounds, const Axis axis) {
 /* ---------- Public methods ---------- */
 
 Player::Player(const Rlib::Rectangle& hitbox, const TrashInfo::Type type,
-               const float speed)
-    : m_hitbox{hitbox}, speed{speed}, m_type{type} {
+               const float speed, const int health)
+    : m_hitbox{hitbox}, speed{speed}, m_type{type}, m_health{health} {
     m_color = TrashInfo::colors_map[type];
 };
 
@@ -132,3 +132,32 @@ void Player::modify_points(const Math::Operations op, const int amount) {
         break;
     }
 };
+
+void Player::modify_health(const Math::Operations op, const int amount) {
+    switch (op) {
+        using enum Math::Operations;
+    case ADD:
+        m_health += amount;
+        break;
+
+    case SUB:
+        m_health -= amount;
+        break;
+
+    case MULT:
+        m_health *= amount;
+        break;
+
+    case DIV:
+        m_health /= amount;
+        break;
+
+    default:
+        break;
+    }
+
+    if (m_health < 0)
+        m_health = 0;
+};
+
+bool Player::is_alive() { return m_health > 0; };
