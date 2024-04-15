@@ -4,6 +4,7 @@
 #include "Utils/Globals.h"
 #include <cstdlib>
 #include <raylib-cpp.hpp>
+#include <raylib.h>
 #include <string>
 
 namespace Rlib = raylib;
@@ -28,7 +29,7 @@ int main() {
     // FPS cap
     window.SetTargetFPS(60);
 
-    window.SetExitKey(KEY_Q);
+    window.SetExitKey(KEY_ESCAPE);
 
     // Delta time
     float dt{};
@@ -56,11 +57,18 @@ int main() {
         if (IsKeyPressed(KEY_SPACE))
             game.reset_enemies(1);
 
+        if (IsKeyPressed(KEY_P))
+            game.set_paused(!game.is_paused());
+
         // Update
         //----------------------------------------------------------------------------------
         {
             if (window.IsResized()) {
+                // Corrects positioning anomalies when resizing
                 game.update_size(window);
+                spaceship.update(game.get_bg_rec());
+
+                game.set_paused(true);
             }
 
             if (!game.is_paused()) {
@@ -89,6 +97,9 @@ int main() {
                 DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);
                 DrawText("Are you sure you want to exit? [Y/N]", 40, 180, 30,
                          WHITE);
+            } else if (game.is_paused()) {
+                DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);
+                DrawText("Paused! Press P to unpause", 40, 180, 30, WHITE);
             }
 
             window.EndDrawing();
