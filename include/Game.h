@@ -8,16 +8,46 @@
 #include <iostream>
 #include <raylib-cpp.hpp>
 #include <raylib.h>
+#include <string>
 #include <vector>
 
 namespace Rlib = raylib;
+
+struct InfoSquare {
+    Rlib::Rectangle rec{};
+    std::string text{};
+
+    Rlib::Color fg{};
+    Rlib::Color bg{};
+
+    int font_size{};
+
+    void draw() {
+        rec.Draw(bg);
+        DrawText(
+            text.c_str(),
+            // Center text
+            (rec.x + (rec.width - MeasureText(text.c_str(), font_size)) / 2.f),
+            (rec.y + (rec.height - font_size) / 2.f), font_size, fg);
+    };
+};
+
+struct Sidebar {
+    Rlib::Rectangle container{};
+
+    InfoSquare score{{}, "", WHITE, RED, 20};
+
+    void draw() {
+        container.Draw(BLUE);
+        score.draw();
+    };
+};
 
 class Game {
   private:
     // The areas on the screen
     Rlib::Rectangle m_bg_rec{};
-    Rlib::Rectangle m_sidebar_rec{};
-    Rlib::Rectangle m_score_rec{};
+    Sidebar m_sidebar{};
 
     // State
     bool m_lost{};
@@ -38,7 +68,6 @@ class Game {
     ~Game() = default;
 
     MYGETTERSETTER(const Rlib::Rectangle&, bg_rec, m_bg_rec);
-    MYGETTERSETTER(const Rlib::Rectangle&, sidebar_rec, m_sidebar_rec);
 
     MYSETTER(const bool, paused, m_paused);
 
