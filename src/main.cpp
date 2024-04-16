@@ -34,6 +34,9 @@ int main() {
 
     // Delta time
     float dt{};
+
+    std::stringstream message{};
+    bool show_message{false};
     //--------------------------------------------------------------------------------------
 
     // Game loop switch flag
@@ -92,20 +95,24 @@ int main() {
             window.ClearBackground(RAYWHITE);
 
             game.draw();
-            std::stringstream a{"Points: "};
-            a << spaceship.get_points();
 
-            DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);
-            DrawText(a.str().c_str(), 40, 180, 30, WHITE);
             spaceship.draw();
 
             if (exit_request) {
                 DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);
-                DrawText("Are you sure you want to exit? [Y/N]", 40, 180, 30,
-                         WHITE);
+                message << "Are you sure you want to exit? [Y/N]";
+                show_message = true;
             } else if (game.is_paused()) {
                 DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);
-                DrawText("Paused! Press P to unpause", 40, 180, 30, WHITE);
+                message << "Paused! Press P to unpause";
+                show_message = true;
+            }
+
+            if (show_message) {
+                DrawText(message.str().c_str(), 40, 180, 30, WHITE);
+
+                show_message = false;
+                message.str("");
             }
 
             window.EndDrawing();
