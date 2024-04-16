@@ -32,6 +32,12 @@ struct InfoSquare {
     };
 };
 
+struct MainBackground {
+    Rlib::Rectangle container{};
+
+    void draw() { container.Draw(BLACK); };
+};
+
 struct Sidebar {
     Rlib::Rectangle container{};
 
@@ -46,7 +52,8 @@ struct Sidebar {
 class Game {
   private:
     // The areas on the screen
-    Rlib::Rectangle m_bg_rec{};
+    // Rlib::Rectangle m_bg{};
+    MainBackground m_bg{};
     Sidebar m_sidebar{};
 
     // State
@@ -59,6 +66,9 @@ class Game {
     // All the rendered enemies
     std::vector<Trash> m_enemies{};
 
+    // Bg stars
+    std::vector<Trash> m_stars{};
+
   public:
     Game();
     Game(Game&&) = default;
@@ -67,7 +77,11 @@ class Game {
     Game& operator=(const Game&) = default;
     ~Game() = default;
 
-    MYGETTERSETTER(const Rlib::Rectangle&, bg_rec, m_bg_rec);
+    const Rlib ::Rectangle& get_bg_rec() const;
+    void set_bg_rec(const Rlib ::Rectangle& value);
+
+    const Rlib ::Rectangle& get_sidebar_rec() const;
+    void set_sidebar_rec(const Rlib ::Rectangle& value);
 
     MYSETTER(const bool, paused, m_paused);
 
