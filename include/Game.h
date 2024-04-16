@@ -16,6 +16,7 @@ class Game {
   private:
     // The areas on the screen
     Rlib::Rectangle m_bg_rec{};
+    Rlib::Rectangle m_sidebar_rec{};
     Rlib::Rectangle m_score_rec{};
 
     // State
@@ -55,4 +56,6 @@ class Game {
     void reset_enemies(const int amount);
 
     void draw();
+
+    void reset();
 };

@@ -17,15 +17,14 @@ int main() {
 
     Game game{};
     game.update_size(window);
-    game.reset_enemies(1);
+    game.reset();
 
-    float spaceship_w{50};
-    Player spaceship{{game.get_bg_rec().x + (game.get_bg_rec().width / 2) -
-                          spaceship_w / 2.f,
-                      game.get_bg_rec().y + game.get_bg_rec().height -
-                          (spaceship_w * 1.5f) / 2.f,
-                      spaceship_w, spaceship_w * 1.5f},
+    Player spaceship{{0, 0,
+                      static_cast<float>(Config::General::spaceship_size.x),
+                      Config::General::spaceship_size.y * 1.5f},
                      TrashInfo::Type::METAL};
+
+    spaceship.place_in_middle(game.get_bg_rec());
 
     // FPS cap
     window.SetTargetFPS(60);
@@ -56,6 +55,16 @@ int main() {
                 exit_request = false;
                 game.set_paused(false);
             }
+        } else if (game.did_lose()) {
+            if (IsKeyPressed(KEY_Y)) {
+                game.set_paused(false);
+                game.reset();
+                spaceship.reset();
+
+                spaceship.place_in_middle(game.get_bg_rec());
+            } else if (IsKeyPressed(KEY_N)) {
+                exit_request = true;
+            }
         }
 
         if (IsKeyPressed(KEY_SPACE))
@@ -81,9 +90,11 @@ int main() {
                 game.update(dt, spaceship);
 
                 spaceship.update(game.get_bg_rec());
-
                 spaceship.handle_input(game.get_bg_rec(), dt);
             }
+
+            if (game.did_lose())
+                game.set_paused(true);
         }
         //----------------------------------------------------------------------------------
 
@@ -101,6 +112,10 @@ int main() {
             if (exit_request) {
                 DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);
                 message << "Are you sure you want to exit? [Y/N]";
+                show_message = true;
+            } else if (game.did_lose()) {
+                DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);
+                message << "You lost! Wanna try again? [Y/N]";
                 show_message = true;
             } else if (game.is_paused()) {
                 DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);

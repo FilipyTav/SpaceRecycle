@@ -54,8 +54,8 @@ void Game::update(const float dt, Player& player) {
 };
 
 void Game::reset_enemies(const int amount) {
-    m_enemies.resize(amount, {TrashInfo::Type::MAX_TYPES});
-    m_enemies[0] = Trash::create_random(m_bg_rec);
+    m_enemies.reserve(amount);
+    m_enemies.resize(1, {Trash::create_random(m_bg_rec)});
 
     enemy_spaw_t.reset();
 };
@@ -69,3 +69,12 @@ void Game::draw() {
 };
 
 const bool Game::is_paused() { return m_paused; };
+
+void Game::reset() {
+    this->reset_enemies(10);
+
+    m_lost = false;
+    m_won = false;
+
+    m_paused = false;
+};

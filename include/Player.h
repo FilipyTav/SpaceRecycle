@@ -69,4 +69,17 @@ class Player {
     void modify_health(const Math::Operations op, const int amount);
 
     bool is_alive();
+
+    void reset(const int health = 3) {
+        m_score = 0;
+        m_health = health;
+    };
+
+    void place_in_middle(const Rlib::Rectangle bounds) {
+        m_hitbox.x =
+            get_middle_rec(bounds).x - Config::General::spaceship_size.x / 2.f;
+
+        m_hitbox.y = get_middle_rec(bounds).y -
+                     (Config::General::spaceship_size.y * 1.5f) / 2.f;
+    };
 };

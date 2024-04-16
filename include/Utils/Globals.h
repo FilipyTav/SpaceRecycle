@@ -42,7 +42,9 @@ namespace Config {
 namespace General {
 inline const std::string root_path =
     std::string(GetApplicationDirectory()) + "../";
-}
+
+inline Shy<int> spaceship_size{50, 50};
+} // namespace General
 
 namespace Trash {
 // How many can be in the screen at the same time
@@ -63,3 +65,7 @@ enum class Operations {
     MAX_OPERATIONS,
 };
 }
+
+inline Shy<float> get_middle_rec(const Rlib::Rectangle& rec) {
+    return {rec.x + rec.width / 2, rec.y + rec.height / 2};
+};
