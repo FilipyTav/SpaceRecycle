@@ -12,9 +12,13 @@ void Game::update_size(const Rlib::Window& window) {
     this->set_bg_rec({0, 0, static_cast<float>(window.GetWidth() * .70),
                       static_cast<float>(window.GetHeight())});
 
+    this->set_sidebar_rec({m_bg_rec.x + m_bg_rec.width, 0,
+                           static_cast<float>(window.GetWidth() * .30),
+                           static_cast<float>(window.GetHeight())});
+
     for (Trash& trash : m_enemies) {
         trash.correct_position(Orientation::Axis::HORIZONTAL, m_bg_rec);
-        // a.correct_position(Orientation::Axis::VERTICAL, m_bg_rec);
+        // trash.correct_position(Orientation::Axis::VERTICAL, m_bg_rec);
     }
 };
 
@@ -62,6 +66,7 @@ void Game::reset_enemies(const int amount) {
 
 void Game::draw() {
     m_bg_rec.Draw(BLACK);
+    m_sidebar_rec.Draw(BLUE);
 
     for (auto& enemy : m_enemies) {
         enemy.draw();

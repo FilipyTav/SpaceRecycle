@@ -38,6 +38,7 @@ class Game {
     ~Game() = default;
 
     MYGETTERSETTER(const Rlib::Rectangle&, bg_rec, m_bg_rec);
+    MYGETTERSETTER(const Rlib::Rectangle&, sidebar_rec, m_sidebar_rec);
 
     MYSETTER(const bool, paused, m_paused);
 
