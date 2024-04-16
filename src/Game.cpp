@@ -26,7 +26,7 @@ void Game::update_size(const Rlib::Window& window) {
         m_sidebar.score.rec = Rlib::Rectangle{
             m_bg_rec.x + m_bg_rec.width + (m_sidebar.container.width * .05f),
             window.GetHeight() * .10f, m_sidebar.container.width * .9f,
-            (float)m_sidebar.score.font_size};
+            m_sidebar.score.font_size * 1.5f};
     }
 
     for (Trash& trash : m_enemies) {
