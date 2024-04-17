@@ -44,35 +44,7 @@ int main() {
     bool exit_request{false};
 
     while (running) {
-        if (window.ShouldClose()) {
-            exit_request = true;
-            game.set_paused(true);
-        }
-
-        if (exit_request) {
-            if (IsKeyPressed(KEY_Y))
-                running = false;
-            else if (IsKeyPressed(KEY_N)) {
-                exit_request = false;
-                game.set_paused(false);
-            }
-        } else if (game.did_lose()) {
-            if (IsKeyPressed(KEY_Y)) {
-                game.set_paused(false);
-                game.reset();
-                spaceship.reset();
-
-                spaceship.place_in_middle(game.get_bg_rec());
-            } else if (IsKeyPressed(KEY_N)) {
-                exit_request = true;
-            }
-        } else {
-            if (IsKeyPressed(KEY_P))
-                game.set_paused(!game.is_paused());
-        }
-
-        if (IsKeyPressed(KEY_SPACE))
-            game.reset_enemies(1);
+        game.handle_input(window, &exit_request, &running, spaceship);
 
         // Update
         //----------------------------------------------------------------------------------

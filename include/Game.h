@@ -6,13 +6,12 @@
 #include "Utils/Defines.h"
 #include "Utils/Globals.h"
 #include "Utils/Timer.h"
+#include <algorithm>
 #include <iostream>
 #include <raylib-cpp.hpp>
 #include <raylib.h>
 #include <string>
 #include <vector>
-
-namespace Rlib = raylib;
 
 struct InfoSquare {
     Rlib::Rectangle rec{};
@@ -129,4 +128,7 @@ class Game {
     void draw();
 
     void reset();
+
+    void handle_input(const Rlib::Window& window, bool* exit_request,
+                      bool* running, Player& spaceship);
 };

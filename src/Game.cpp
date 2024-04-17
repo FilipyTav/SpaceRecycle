@@ -120,3 +120,37 @@ const Rlib ::Rectangle& Game::get_sidebar_rec() const {
 void Game::set_sidebar_rec(const Rlib ::Rectangle& value) {
     m_sidebar.container = value;
 };
+
+void Game::handle_input(const Rlib::Window& window, bool* exit_request,
+                        bool* running, Player& spaceship) {
+
+    if (window.ShouldClose()) {
+        *exit_request = true;
+        this->set_paused(true);
+    }
+
+    if (*exit_request) {
+        if (IsKeyPressed(KEY_Y))
+            *running = false;
+        else if (IsKeyPressed(KEY_N)) {
+            *exit_request = false;
+            this->set_paused(false);
+        }
+    } else if (this->did_lose()) {
+        if (IsKeyPressed(KEY_Y)) {
+            this->set_paused(false);
+            this->reset();
+            spaceship.reset();
+
+            spaceship.place_in_middle(this->get_bg_rec());
+        } else if (IsKeyPressed(KEY_N)) {
+            *exit_request = true;
+        }
+    } else {
+        if (IsKeyPressed(KEY_P)) {
+
+            this->set_paused(!this->is_paused());
+            std::cout << "Pause\n";
+        }
+    }
+};
