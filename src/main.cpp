@@ -65,13 +65,13 @@ int main() {
             } else if (IsKeyPressed(KEY_N)) {
                 exit_request = true;
             }
+        } else {
+            if (IsKeyPressed(KEY_P))
+                game.set_paused(!game.is_paused());
         }
 
         if (IsKeyPressed(KEY_SPACE))
             game.reset_enemies(1);
-
-        if (IsKeyPressed(KEY_P))
-            game.set_paused(!game.is_paused());
 
         // Update
         //----------------------------------------------------------------------------------

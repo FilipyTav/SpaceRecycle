@@ -13,7 +13,10 @@ struct Star {
     Rlib::Color color{WHITE};
 
     void update(const float dt) { rec.y += speed * dt; };
-    void draw() { rec.Draw(color); };
+    void draw() {
+        // TODO: Add blur or shine effects
+        rec.DrawRounded(1, 1, color);
+    };
 
     Star static create_random(const Rlib::Rectangle& bounds) {
         const int sz{Random::get(1, 10)};
@@ -22,6 +25,6 @@ struct Star {
                      Random::get((int)bounds.x, bounds.x + bounds.width - sz)),
                  0, static_cast<float>(sz), static_cast<float>(sz)},
                 sz,
-                Random::get(50, 150)};
+                Random::get(20, 150)};
     };
 };
