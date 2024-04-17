@@ -32,11 +32,14 @@ Player::Player(const Rlib::Rectangle& hitbox, const TrashInfo::Type type,
 };
 
 void Player::update(const Rlib::Rectangle& bounds) {
-    // Constant height
-    m_hitbox.y = bounds.y + bounds.height - m_hitbox.height - 30;
-
     this->correct_position(bounds, Axis::HORIZONTAL);
     this->correct_position(bounds, Axis::VERTICAL);
+};
+
+void Player::update_position(const Rlib::Rectangle& bounds) {
+    this->place_at_bottom(bounds);
+
+    this->update(bounds);
 };
 
 void Player::move(const Direction direction, const Rlib::Rectangle& bounds,
@@ -44,19 +47,23 @@ void Player::move(const Direction direction, const Rlib::Rectangle& bounds,
     switch (direction) {
         using enum Direction;
     case UP:
+        m_hitbox.y -= speed * dt;
+        this->correct_position(bounds, Axis::VERTICAL);
+        break;
+
     case DOWN:
+        m_hitbox.y += speed * dt;
+        this->correct_position(bounds, Axis::VERTICAL);
         break;
 
     case LEFT:
         m_hitbox.x -= speed * dt;
         this->correct_position(bounds, Axis::HORIZONTAL);
-
         break;
 
     case RIGHT:
         m_hitbox.x += speed * dt;
         this->correct_position(bounds, Axis::HORIZONTAL);
-
         break;
 
     default:
@@ -70,8 +77,14 @@ void Player::set_type(const TrashInfo::Type type) {
 };
 
 void Player::handle_input(const Rlib::Rectangle& bounds, const float dt) {
+    if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP))
+        this->move(Direction::UP, bounds, dt);
+
     if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT))
         this->move(Direction::LEFT, bounds, dt);
+
+    if (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN))
+        this->move(Direction::DOWN, bounds, dt);
 
     if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT))
         this->move(Direction::RIGHT, bounds, dt);
@@ -161,3 +174,32 @@ void Player::modify_health(const Math::Operations op, const int amount) {
 };
 
 bool Player::is_alive() { return m_health > 0; };
+
+void Player::reset(const int health) {
+    m_score = 0;
+    m_health = health;
+};
+
+void Player::place_in_middle(const Rlib::Rectangle bounds) {
+    m_hitbox.x =
+        get_middle_rec(bounds).x - Config::General::spaceship_size.x / 2.f;
+
+    m_hitbox.y = get_middle_rec(bounds).y -
+                 (Config::General::spaceship_size.y * 1.5f) / 2.f;
+};
+
+bool Player::is_same_type(const Trash& enemy) const {
+    return enemy.get_type() == m_type;
+};
+
+bool Player::is_correct_enemy(const Trash& enemy) const {
+    return is_enemy_colliding(enemy.get_hitbox()) && enemy.get_type() == m_type;
+};
+
+bool Player::is_enemy_colliding(const Rlib::Rectangle& enemy_hitbox) const {
+    return CheckCollisionRecs(m_hitbox, enemy_hitbox);
+};
+
+void Player::place_at_bottom(const Rlib::Rectangle bounds) {
+    m_hitbox.y = bounds.y + bounds.height - m_hitbox.height - 30;
+};

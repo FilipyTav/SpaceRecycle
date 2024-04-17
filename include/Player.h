@@ -39,6 +39,7 @@ class Player {
     MYGETTER(const Rlib::Rectangle, hitbox, m_hitbox);
 
     void update(const Rlib::Rectangle& bounds);
+    void update_position(const Rlib::Rectangle& bounds);
 
     void move(const Direction direction, const Rlib::Rectangle& bounds,
               const float dt = 0);
@@ -49,19 +50,12 @@ class Player {
 
     void handle_input(const Rlib::Rectangle& bounds, const float dt);
 
-    bool is_enemy_colliding(const Rlib::Rectangle& enemy_hitbox) const {
-        return CheckCollisionRecs(m_hitbox, enemy_hitbox);
-    };
+    bool is_enemy_colliding(const Rlib::Rectangle& enemy_hitbox) const;
 
-    bool is_correct_enemy(const Trash& enemy) const {
-        return is_enemy_colliding(enemy.get_hitbox()) &&
-               enemy.get_type() == m_type;
-    };
+    bool is_correct_enemy(const Trash& enemy) const;
 
     // If the enemy collected has the same type as the spaceship
-    bool is_same_type(const Trash& enemy) const {
-        return enemy.get_type() == m_type;
-    };
+    bool is_same_type(const Trash& enemy) const;
 
     MYGETTER(const int, points, m_score);
     MYGETTER(const int, hp, m_health);
@@ -71,16 +65,9 @@ class Player {
 
     bool is_alive();
 
-    void reset(const int health = 3) {
-        m_score = 0;
-        m_health = health;
-    };
+    void reset(const int health = 3);
 
-    void place_in_middle(const Rlib::Rectangle bounds) {
-        m_hitbox.x =
-            get_middle_rec(bounds).x - Config::General::spaceship_size.x / 2.f;
+    void place_in_middle(const Rlib::Rectangle bounds);
 
-        m_hitbox.y = get_middle_rec(bounds).y -
-                     (Config::General::spaceship_size.y * 1.5f) / 2.f;
-    };
+    void place_at_bottom(const Rlib::Rectangle bounds);
 };

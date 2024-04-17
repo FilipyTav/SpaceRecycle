@@ -25,6 +25,7 @@ int main() {
                      TrashInfo::Type::METAL};
 
     spaceship.place_in_middle(game.get_bg_rec());
+    spaceship.place_at_bottom(game.get_bg_rec());
 
     // FPS cap
     window.SetTargetFPS(60);
@@ -79,7 +80,7 @@ int main() {
             if (window.IsResized()) {
                 // Corrects positioning anomalies when resizing
                 game.update_size(window);
-                spaceship.update(game.get_bg_rec());
+                spaceship.update_position(game.get_bg_rec());
 
                 game.set_paused(true);
             }
