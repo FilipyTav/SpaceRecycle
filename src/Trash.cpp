@@ -1,4 +1,5 @@
 #include "Trash.h"
+#include "Utils/Globals.h"
 
 /* ---------- Public methods ---------- */
 Trash::Trash(const Type type, const int speed) : m_type{type}, y_speed{speed} {
@@ -50,11 +51,11 @@ void Trash::draw() {
 
 Trash Trash::create_random(const Rlib::Rectangle& bounds) {
     using enum Type;
-    constexpr int hitbox_size{100};
 
     return {static_cast<Type>(Random::get(0, static_cast<int>(MAX_TYPES) - 1)),
             Random::get(100, 400),
             {static_cast<float>(Random::get(
-                 (int)bounds.x, bounds.x + bounds.width - hitbox_size)),
-             0, hitbox_size, hitbox_size}};
+                 (int)bounds.x, bounds.x + bounds.width - TrashInfo::size.x)),
+             0, static_cast<float>(TrashInfo::size.x),
+             static_cast<float>(TrashInfo::size.y)}};
 };

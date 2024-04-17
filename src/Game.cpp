@@ -143,14 +143,12 @@ void Game::handle_input(const Rlib::Window& window, bool* exit_request,
             spaceship.reset();
 
             spaceship.place_in_middle(this->get_bg_rec());
+            spaceship.place_at_bottom(this->get_bg_rec());
         } else if (IsKeyPressed(KEY_N)) {
             *exit_request = true;
         }
     } else {
-        if (IsKeyPressed(KEY_P)) {
-
+        if (IsKeyPressed(KEY_P))
             this->set_paused(!this->is_paused());
-            std::cout << "Pause\n";
-        }
     }
 };
