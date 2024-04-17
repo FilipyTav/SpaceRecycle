@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Player.h"
+#include "Star.h"
 #include "Trash.h"
 #include "Utils/Defines.h"
 #include "Utils/Globals.h"
@@ -35,7 +36,34 @@ struct InfoSquare {
 struct MainBackground {
     Rlib::Rectangle container{};
 
-    void draw() { container.Draw(BLACK); };
+    // Bg stars
+    std::vector<Star> stars{};
+    Timer stars_timer{1};
+
+    Rlib::Color color{BLACK};
+
+    MainBackground() { stars_timer.start(.3); };
+
+    void draw() {
+        container.Draw(color);
+        for (auto& star : stars) {
+            star.draw();
+        }
+    };
+
+    void update(const float dt) {
+        for (int i = 0; i < stars.size(); i++) {
+            stars[i].update(dt);
+
+            if (!is_rec_inside(container, stars[i].rec))
+                stars.erase(stars.begin() + i);
+        }
+
+        if (stars_timer.is_done()) {
+            stars.push_back(Star::create_random(container));
+            stars_timer.reset();
+        }
+    };
 };
 
 struct Sidebar {
@@ -66,9 +94,6 @@ class Game {
     // All the rendered enemies
     std::vector<Trash> m_enemies{};
 
-    // Bg stars
-    std::vector<Trash> m_stars{};
-
   public:
     Game();
     Game(Game&&) = default;
@@ -88,7 +113,7 @@ class Game {
     const bool is_paused();
 
     // Time between enemy spawns
-    Timer enemy_spaw_t{1};
+    Timer enemy_spawn_t{1};
 
     bool did_lose();
     bool did_win();

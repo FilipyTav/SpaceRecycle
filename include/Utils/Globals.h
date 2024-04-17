@@ -69,3 +69,9 @@ enum class Operations {
 inline Shy<float> get_middle_rec(const Rlib::Rectangle& rec) {
     return {rec.x + rec.width / 2, rec.y + rec.height / 2};
 };
+
+inline bool is_rec_inside(const Rlib::Rectangle& container,
+                          const Rlib::Rectangle& contained) {
+    return contained.x + contained.width <= container.x + container.width &&
+           contained.y + contained.height <= container.y + container.height;
+};
