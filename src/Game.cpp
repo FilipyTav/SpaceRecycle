@@ -1,6 +1,5 @@
 #include "Game.h"
 #include "Utils/Globals.h"
-#include <iostream>
 #include <raylib.h>
 
 Game::Game() {
@@ -22,9 +21,13 @@ void Game::update_size(const Rlib::Window& window) {
                                static_cast<float>(window.GetHeight())});
 
         m_sidebar.score.rec = Rlib::Rectangle{
-            m_bg.container.x + m_bg.container.width +
-                (m_sidebar.container.width * .05f),
+            m_sidebar.container.x + (m_sidebar.container.width * .05f),
             window.GetHeight() * .10f, m_sidebar.container.width * .9f,
+            m_sidebar.score.font_size * 1.5f};
+
+        m_sidebar.lives.rec = Rlib::Rectangle{
+            m_sidebar.container.x + (m_sidebar.container.width * .05f),
+            window.GetHeight() * .30f, m_sidebar.container.width * .9f,
             m_sidebar.score.font_size * 1.5f};
     }
 
@@ -74,6 +77,7 @@ void Game::update(const float dt, Player& player) {
     }
 
     m_sidebar.score.text = TextFormat("Score: %i", player.get_points());
+    m_sidebar.lives.text = TextFormat("HP: %i", player.get_hp());
 };
 
 void Game::reset_enemies(const int amount) {

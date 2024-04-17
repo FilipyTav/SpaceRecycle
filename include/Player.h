@@ -64,6 +64,7 @@ class Player {
     };
 
     MYGETTER(const int, points, m_score);
+    MYGETTER(const int, hp, m_health);
 
     void modify_points(const Math::Operations op, const int amount);
     void modify_health(const Math::Operations op, const int amount);

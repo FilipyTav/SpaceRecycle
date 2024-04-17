@@ -70,10 +70,12 @@ struct Sidebar {
     Rlib::Rectangle container{};
 
     InfoSquare score{{}, "", WHITE, DARKBLUE, 30};
+    InfoSquare lives{{}, "", WHITE, DARKBLUE, 30};
 
     void draw() {
         container.Draw(GRAY);
         score.draw();
+        lives.draw();
     };
 };
 
