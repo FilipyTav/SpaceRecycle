@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include <raylib-cpp.hpp>
 #include <unordered_map>
 
@@ -9,6 +10,57 @@ template <typename T> //
 struct Shy {
     T x{};
     T y{};
+};
+
+struct SpriteSheet {
+    Rlib::Texture2D texture{};
+    Shy<int> size{};
+
+    Rlib::Rectangle sprite_rec{};
+    int index{0};
+
+    SpriteSheet(){};
+
+    SpriteSheet(const std::string path, const Shy<int> size) : size{size} {
+        texture.Load(path);
+
+        sprite_rec =
+            Rlib::Rectangle{{0, 0},
+                            {texture.width / static_cast<float>(size.x),
+                             texture.height / static_cast<float>(size.y)}};
+    };
+
+    const Rlib::Rectangle get_rec_by_index(const int index) const {
+        return {{static_cast<float>(size.x * (index % size.x)),
+                 static_cast<float>(size.y * (index % size.x))},
+                {sprite_rec.width, sprite_rec.height}};
+    };
+
+    void rec_advance() {
+        index = (index + 1) % (size.x * size.y);
+
+        sprite_rec.x += size.x;
+
+        if (sprite_rec.x == texture.width) {
+            sprite_rec.x = 0;
+            sprite_rec.y += size.y;
+        }
+
+        if (sprite_rec.y == texture.height) {
+            sprite_rec.y = 0;
+        }
+    };
+
+    // @param i = which index to use. < 0 means it should use the internal index
+    void draw(const Rlib::Rectangle& dest_rec, int i = -1) const {
+        if (i < 0) {
+            texture.Draw(sprite_rec, dest_rec);
+        } else {
+            i = index;
+
+            texture.Draw(this->get_rec_by_index(index), dest_rec);
+        }
+    };
 };
 
 namespace Orientation {
@@ -44,6 +96,8 @@ namespace Config {
 namespace General {
 inline const std::string root_path =
     std::string(GetApplicationDirectory()) + "../";
+
+inline const std::string assets_path = root_path + "assets/";
 
 inline Shy<int> spaceship_size{50, 50};
 } // namespace General

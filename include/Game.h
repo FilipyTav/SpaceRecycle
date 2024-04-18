@@ -21,14 +21,49 @@ struct InfoSquare {
     Rlib::Color bg{};
 
     int font_size{};
+    bool is_sprite{false};
 
-    void draw() {
+    SpriteSheet spritesheet{};
+
+    InfoSquare(const std::string path, Shy<int> spritesheet_size,
+               const Rlib::Color bg)
+        : bg{bg} {
+        spritesheet = SpriteSheet{path, spritesheet_size};
+        is_sprite = true;
+    };
+
+    InfoSquare(const std::string_view text, const Rlib::Color bg,
+               const Rlib::Color fg, const int font_size)
+        : text{text}, bg{bg}, fg{fg}, font_size{font_size} {
+        is_sprite = false;
+    };
+
+    void update_position(const Rlib::Rectangle& bounds,
+                         Shy<float> position = {0, 0}) {
+        if (is_sprite) {
+            rec.x = position.x;
+            rec.y = position.y;
+
+            rec.width = spritesheet.sprite_rec.width;
+            rec.height = spritesheet.sprite_rec.height;
+        } else {
+            rec = Rlib::Rectangle{bounds.x + (bounds.width * .05f),
+                                  bounds.GetHeight() * .10f, bounds.width * .9f,
+                                  font_size * 1.5f};
+        }
+    };
+
+    void draw(const int sprite_index = -1) {
         rec.Draw(bg);
-        DrawText(
-            text.c_str(),
-            // Center text
-            (rec.x + (rec.width - MeasureText(text.c_str(), font_size)) / 2.f),
-            (rec.y + (rec.height - font_size) / 2.f), font_size, fg);
+
+        if (is_sprite)
+            spritesheet.draw(rec, sprite_index);
+        else
+            DrawText(text.c_str(),
+                     // Center text
+                     (rec.x +
+                      (rec.width - MeasureText(text.c_str(), font_size)) / 2.f),
+                     (rec.y + (rec.height - font_size) / 2.f), font_size, fg);
     };
 };
 
@@ -68,13 +103,14 @@ struct MainBackground {
 struct Sidebar {
     Rlib::Rectangle container{};
 
-    InfoSquare score{{}, "", WHITE, DARKBLUE, 30};
-    InfoSquare lives{{}, "", WHITE, DARKBLUE, 30};
+    InfoSquare score{"", DARKBLUE, WHITE, 30};
+    InfoSquare lives{
+        Config::General::assets_path + "images/hearts.png", {2, 1}, BLANK};
 
     void draw() {
         container.Draw(GRAY);
         score.draw();
-        lives.draw();
+        lives.draw(1);
     };
 };
 

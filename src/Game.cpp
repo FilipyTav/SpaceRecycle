@@ -20,15 +20,21 @@ void Game::update_size(const Rlib::Window& window) {
                                static_cast<float>(window.GetWidth() * .30),
                                static_cast<float>(window.GetHeight())});
 
-        m_sidebar.score.rec = Rlib::Rectangle{
-            m_sidebar.container.x + (m_sidebar.container.width * .05f),
-            window.GetHeight() * .10f, m_sidebar.container.width * .9f,
-            m_sidebar.score.font_size * 1.5f};
+        // m_sidebar.score.rec = Rlib::Rectangle{
+        //     m_sidebar.container.x + (m_sidebar.container.width * .05f),
+        //     window.GetHeight() * .10f, m_sidebar.container.width * .9f,
+        //     m_sidebar.score.font_size * 1.5f};
 
-        m_sidebar.lives.rec = Rlib::Rectangle{
-            m_sidebar.container.x + (m_sidebar.container.width * .05f),
-            window.GetHeight() * .30f, m_sidebar.container.width * .9f,
-            m_sidebar.score.font_size * 1.5f};
+        m_sidebar.score.update_position(m_sidebar.container);
+        m_sidebar.lives.update_position(m_sidebar.container);
+        m_sidebar.lives.update_position(
+            m_sidebar.container,
+            {m_sidebar.container.x + (m_sidebar.container.width * .05f),
+             window.GetHeight() * .30f});
+
+        // m_sidebar.lives.rec =
+        //     Rlib::Rectangle{, , m_sidebar.container.width * .9f,
+        //                     m_sidebar.score.font_size * 1.5f};
     }
 
     for (Trash& trash : m_enemies) {
