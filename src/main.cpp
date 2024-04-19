@@ -53,6 +53,7 @@ int main() {
             if (window.IsResized()) {
                 // Corrects positioning anomalies when resizing
                 game.update_size(window);
+                spaceship.place_at_bottom(game.get_bg_rec());
             }
 
             switch (game.get_current_screen()) {
@@ -90,7 +91,7 @@ int main() {
             }
 
             if (IsKeyPressed(KEY_SPACE))
-                game.set_current_screen(General::GameScreen::GAMEPLAY);
+                game.set_current_screen(General::GameScreen::GAMEPLAY, window);
         }
         //----------------------------------------------------------------------------------
 
@@ -102,6 +103,7 @@ int main() {
             switch (game.get_current_screen()) {
                 using enum General::GameScreen;
             case TITLE:
+                game.draw(spaceship);
                 break;
 
             case INSTRUCTIONS:

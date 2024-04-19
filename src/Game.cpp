@@ -24,6 +24,12 @@ void Game::update_size(const Rlib::Window& window) {
         break;
 
     case GAMEPLAY: {
+        // Main background
+        {
+            this->set_bg_rec({0, 0, static_cast<float>(window.GetWidth() * .70),
+                              static_cast<float>(window.GetHeight())});
+        }
+
         // Sidebar
         {
             this->set_sidebar_rec({m_bg.container.x + m_bg.container.width, 0,
@@ -46,12 +52,6 @@ void Game::update_size(const Rlib::Window& window) {
                 {m_sidebar.container.x + (m_sidebar.container.width * .05f),
                  window.GetHeight() * .40f},
                 Config::Sprites::hearts_size);
-        }
-
-        // Main background
-        {
-            this->set_bg_rec({0, 0, static_cast<float>(window.GetWidth() * .70),
-                              static_cast<float>(window.GetHeight())});
         }
 
         for (Trash& trash : m_enemies) {
@@ -118,11 +118,28 @@ void Game::reset_enemies(const int amount) {
 };
 
 void Game::draw(const Player& player) {
-    m_bg.draw();
-    m_sidebar.draw(player);
 
-    for (auto& enemy : m_enemies) {
-        enemy.draw();
+    switch (m_current_screen) {
+        using enum General::GameScreen;
+
+    case TITLE:
+        m_bg.container.Draw(BLACK);
+        break;
+
+    case INSTRUCTIONS:
+        break;
+
+    case GAMEPLAY: {
+        m_bg.draw();
+        m_sidebar.draw(player);
+
+        for (auto& enemy : m_enemies) {
+            enemy.draw();
+        }
+    } break;
+
+    default:
+        break;
     }
 };
 

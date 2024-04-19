@@ -102,6 +102,12 @@ class Game {
     MYSETTER(const bool, paused, m_paused);
     MYGETTERSETTER(const General::GameScreen, current_screen, m_current_screen);
 
+    void set_current_screen(const General ::GameScreen value,
+                            const Rlib::Window& window) {
+        this->set_current_screen(value);
+        this->update_size(window);
+    };
+
     const bool is_paused();
 
     // Time between enemy spawns
