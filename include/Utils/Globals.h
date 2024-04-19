@@ -71,8 +71,6 @@ struct SpriteSheet {
             assert(i >= 0 && i < size.x * size.y &&
                    "SpriteSheet::draw() invalid index");
 
-            // i = index;
-
             texture.Draw(this->get_rec_by_index(i), dest_rec);
         }
     };
