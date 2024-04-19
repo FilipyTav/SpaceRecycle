@@ -36,9 +36,31 @@ struct InfoSquare {
     // @param size = in pixels
     void update_position(Shy<float> position, Shy<float> size = {});
 
+    void set_size(Shy<float> size);
+
     void draw(const int sprite_index = -1);
+
+    int text_size() const { return MeasureText(text.c_str(), font_size); };
 };
 
+// struct Button {
+//     enum State { NORMAL, MOUSE_HOVER, PRESSED, MAX_STATES };
+//
+//     InfoSquare *data{};
+//     State state{NORMAL};
+//
+//     Button(const Shy<float>& size) {
+//     };
+//
+//     bool is_hovered(const Rlib::Vector2& mouse) {
+//         return data->rec.CheckCollision(mouse) && state == MOUSE_HOVER;
+//     };
+//
+//     bool is_pressed(const Rlib::Vector2& mouse) {
+//         return data->rec.CheckCollision(mouse) && state == PRESSED;
+//     };
+// };
+//
 struct MainBackground {
     Rlib::Rectangle container{};
 
@@ -68,8 +90,16 @@ struct Sidebar {
 
 struct TitleScreen {
     InfoSquare gamename{Config::General::game_name, BLANK, BLUE, 50};
+    InfoSquare play_btn{"Play", BLUE, WHITE, 30};
+    InfoSquare instructions_btn{"Controls", BLUE, WHITE, 30};
+    InfoSquare exit_btn{"Exit", RED, WHITE, 30};
 
-    void draw() { gamename.draw(); };
+    void draw() {
+        gamename.draw();
+        play_btn.draw();
+        instructions_btn.draw();
+        exit_btn.draw();
+    };
 };
 
 class Game {

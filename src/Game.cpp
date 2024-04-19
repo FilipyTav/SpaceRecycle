@@ -24,6 +24,27 @@ void Game::update_size(const Rlib::Window& window) {
             m_title_screen.gamename.update_position(
                 {m_bg.container.x + m_bg.container.width / 2,
                  m_bg.container.y + m_bg.container.height * .20f});
+
+            m_title_screen.play_btn.set_size(
+                {150, m_title_screen.play_btn.font_size * 1.5f});
+            m_title_screen.play_btn.update_position(
+                {m_bg.container.x + m_bg.container.width / 2 -
+                     m_title_screen.play_btn.rec.width / 2,
+                 m_bg.container.y + m_bg.container.height * .40f});
+
+            m_title_screen.instructions_btn.set_size(
+                {150, m_title_screen.instructions_btn.font_size * 1.5f});
+            m_title_screen.instructions_btn.update_position(
+                {m_bg.container.x + m_bg.container.width / 2 -
+                     m_title_screen.instructions_btn.rec.width / 2,
+                 m_title_screen.play_btn.rec.y + 80});
+
+            m_title_screen.exit_btn.set_size(
+                {150, m_title_screen.exit_btn.font_size * 1.5f});
+            m_title_screen.exit_btn.update_position(
+                {m_bg.container.x + m_bg.container.width / 2 -
+                     m_title_screen.exit_btn.rec.width / 2,
+                 m_title_screen.instructions_btn.rec.y + 80});
         }
     } break;
 
@@ -240,6 +261,11 @@ void InfoSquare::draw(const int sprite_index) {
             // Center text
             (rec.x + (rec.width - MeasureText(text.c_str(), font_size)) / 2.f),
             (rec.y + (rec.height - font_size) / 2.f), font_size, fg);
+};
+
+void InfoSquare::set_size(Shy<float> size) {
+    rec.width = size.x;
+    rec.height = size.y;
 };
 
 /* ---------- MainBackground methods ---------- */
