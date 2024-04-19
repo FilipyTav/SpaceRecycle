@@ -38,19 +38,13 @@ struct InfoSquare {
         is_sprite = false;
     };
 
-    void update_position(const Rlib::Rectangle& bounds,
-                         Shy<float> position = {0, 0}) {
-        if (is_sprite) {
-            rec.x = position.x;
-            rec.y = position.y;
-
-            rec.width = spritesheet.sprite_rec.width;
-            rec.height = spritesheet.sprite_rec.height;
-        } else {
-            rec = Rlib::Rectangle{bounds.x + (bounds.width * .05f),
-                                  bounds.GetHeight() * .10f, bounds.width * .9f,
-                                  font_size * 1.5f};
+    // @param size = in pixels
+    void update_position(Shy<float> position, Shy<float> size = {}) {
+        if (!size) {
+            size = {rec.width, rec.height};
         }
+
+        rec = Rlib::Rectangle{{position.x, position.y}, {size.x, size.y}};
     };
 
     void draw(const int sprite_index = -1) {
@@ -107,10 +101,17 @@ struct Sidebar {
     InfoSquare lives{
         Config::General::assets_path + "images/hearts.png", {2, 1}, BLANK};
 
-    void draw() {
+    void draw(const Player& player) {
         container.Draw(GRAY);
         score.draw();
-        lives.draw(1);
+
+        for (int i = 0; i < player.get_max_hp(); i++) {
+            lives.draw(1);
+            lives.update_position({lives.rec.x + lives.rec.width, lives.rec.y});
+        }
+
+        lives.update_position(
+            {lives.rec.x - player.get_max_hp() * lives.rec.width, lives.rec.y});
     };
 };
 
@@ -161,7 +162,7 @@ class Game {
 
     void reset_enemies(const int amount);
 
-    void draw();
+    void draw(const Player& player);
 
     void reset();
 

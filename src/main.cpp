@@ -78,7 +78,7 @@ int main() {
 
             window.ClearBackground(RAYWHITE);
 
-            game.draw();
+            game.draw(spaceship);
 
             spaceship.draw();
 

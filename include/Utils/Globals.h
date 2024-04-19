@@ -11,6 +11,8 @@ template <typename T> //
 struct Shy {
     T x{};
     T y{};
+
+    bool operator!() { return x == 0 && y == 0; };
 };
 
 struct SpriteSheet {
@@ -114,6 +116,10 @@ inline const std::string assets_path = root_path + "assets/";
 
 inline Shy<int> spaceship_size{50, 50};
 } // namespace General
+
+namespace Sprites {
+inline Shy<float> hearts_size{75, 75};
+}
 
 namespace Trash {
 // How many can be in the screen at the same time

@@ -25,12 +25,16 @@ void Game::update_size(const Rlib::Window& window) {
         //     window.GetHeight() * .10f, m_sidebar.container.width * .9f,
         //     m_sidebar.score.font_size * 1.5f};
 
-        m_sidebar.score.update_position(m_sidebar.container);
-        m_sidebar.lives.update_position(m_sidebar.container);
-        m_sidebar.lives.update_position(
-            m_sidebar.container,
+        m_sidebar.score.update_position(
             {m_sidebar.container.x + (m_sidebar.container.width * .05f),
-             window.GetHeight() * .30f});
+             m_sidebar.container.GetHeight() * .10f},
+            {m_sidebar.container.width * .90f,
+             m_sidebar.score.font_size * 1.5f});
+
+        m_sidebar.lives.update_position(
+            {m_sidebar.container.x + (m_sidebar.container.width * .05f),
+             window.GetHeight() * .30f},
+            Config::Sprites::hearts_size);
 
         // m_sidebar.lives.rec =
         //     Rlib::Rectangle{, , m_sidebar.container.width * .9f,
@@ -93,9 +97,9 @@ void Game::reset_enemies(const int amount) {
     enemy_spawn_t.reset();
 };
 
-void Game::draw() {
+void Game::draw(const Player& player) {
     m_bg.draw();
-    m_sidebar.draw();
+    m_sidebar.draw(player);
 
     for (auto& enemy : m_enemies) {
         enemy.draw();
