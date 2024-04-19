@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <cmath>
 #include <raylib-cpp.hpp>
 #include <unordered_map>
@@ -31,8 +32,19 @@ struct SpriteSheet {
     };
 
     const Rlib::Rectangle get_rec_by_index(const int index) const {
-        return {{static_cast<float>(size.x * (index % size.x)),
-                 static_cast<float>(size.y * (index % size.x))},
+        // index = y + x*width
+        // [ index ] = [ col ] + row * [ width ]
+        // row = ( index - col ) / width
+
+        Shy<float> coords{};
+
+        // col
+        coords.x = (index % size.x);
+
+        // row
+        coords.y = ((index - coords.x)) / size.x;
+
+        return {{coords.x * sprite_rec.width, coords.y * sprite_rec.height},
                 {sprite_rec.width, sprite_rec.height}};
     };
 
@@ -56,9 +68,12 @@ struct SpriteSheet {
         if (i < 0) {
             texture.Draw(sprite_rec, dest_rec);
         } else {
-            i = index;
+            assert(i >= 0 && i < size.x * size.y &&
+                   "SpriteSheet::draw() invalid index");
 
-            texture.Draw(this->get_rec_by_index(index), dest_rec);
+            // i = index;
+
+            texture.Draw(this->get_rec_by_index(i), dest_rec);
         }
     };
 };
