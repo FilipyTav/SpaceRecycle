@@ -7,6 +7,7 @@
 #include "Utils/Globals.h"
 #include "Utils/Timer.h"
 #include <algorithm>
+#include <cstdlib>
 #include <iostream>
 #include <raylib-cpp.hpp>
 #include <raylib.h>
@@ -25,6 +26,9 @@ struct InfoSquare {
 
     SpriteSheet spritesheet{};
 
+    enum State { NORMAL, HOVER, PRESSED, ACTIVATED, MAX_STATES };
+    State state{NORMAL};
+
     // As sprite
     InfoSquare(const std::string path, Shy<int> spritesheet_size,
                const Rlib::Color bg);
@@ -41,26 +45,24 @@ struct InfoSquare {
     void draw(const int sprite_index = -1);
 
     int text_size() const { return MeasureText(text.c_str(), font_size); };
+
+    void handle_input(const Rlib::Vector2& mouse) {
+        // Check button state
+        if (rec.CheckCollision(mouse)) {
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+                state = PRESSED;
+            else
+                state = HOVER;
+
+            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
+                state = ACTIVATED;
+        } else
+            state = NORMAL;
+    };
+
+    bool is_activated() { return state == ACTIVATED; };
 };
 
-// struct Button {
-//     enum State { NORMAL, MOUSE_HOVER, PRESSED, MAX_STATES };
-//
-//     InfoSquare *data{};
-//     State state{NORMAL};
-//
-//     Button(const Shy<float>& size) {
-//     };
-//
-//     bool is_hovered(const Rlib::Vector2& mouse) {
-//         return data->rec.CheckCollision(mouse) && state == MOUSE_HOVER;
-//     };
-//
-//     bool is_pressed(const Rlib::Vector2& mouse) {
-//         return data->rec.CheckCollision(mouse) && state == PRESSED;
-//     };
-// };
-//
 struct MainBackground {
     Rlib::Rectangle container{};
 
@@ -99,6 +101,23 @@ struct TitleScreen {
         play_btn.draw();
         instructions_btn.draw();
         exit_btn.draw();
+    };
+
+    General::GameScreen update(const Rlib::Vector2& mouse) {
+        General::GameScreen screen{};
+
+        play_btn.handle_input(mouse);
+        instructions_btn.handle_input(mouse);
+        exit_btn.handle_input(mouse);
+
+        if (play_btn.is_activated()) {
+            screen = General::GameScreen::GAMEPLAY;
+        } else if (instructions_btn.is_activated()) {
+            screen = General::GameScreen::INSTRUCTIONS;
+        } else if (exit_btn.is_activated()) {
+        }
+
+        return screen;
     };
 };
 
@@ -156,7 +175,7 @@ class Game {
 
     void update_size(const Rlib::Window& window);
 
-    void update(const float dt, Player& player);
+    void update(const float dt, Player& player, const Rlib::Window& window);
 
     void reset_enemies(const int amount);
 

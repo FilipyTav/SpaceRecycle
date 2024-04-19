@@ -59,6 +59,7 @@ int main() {
             switch (game.get_current_screen()) {
                 using enum General::GameScreen;
             case TITLE:
+                game.update(dt, spaceship, window);
                 break;
 
             case INSTRUCTIONS:
@@ -76,7 +77,7 @@ int main() {
                 if (!game.is_paused()) {
                     dt = GetFrameTime();
 
-                    game.update(dt, spaceship);
+                    game.update(dt, spaceship, window);
 
                     spaceship.update(game.get_bg_rec());
                     spaceship.handle_input(game.get_bg_rec(), dt);

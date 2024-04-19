@@ -99,42 +99,57 @@ bool Game::did_lose() { return m_lost; };
 
 bool Game::did_win() { return m_won; };
 
-void Game::update(const float dt, Player& player) {
-    m_bg.update(dt);
+void Game::update(const float dt, Player& player, const Rlib::Window& window) {
+    switch (m_current_screen) {
+        using enum General::GameScreen;
+    case TITLE: {
+        this->set_current_screen(m_title_screen.update(GetMousePosition()),
+                                 window);
+    } break;
 
-    // Enemies
-    {
-        if (enemy_spawn_t.is_done()) {
-            m_enemies.push_back(Trash::create_random(m_bg.container));
+    case INSTRUCTIONS:
+        break;
 
-            enemy_spawn_t.reset();
-        }
+    case GAMEPLAY: {
+        // Enemies
+        {
+            if (enemy_spawn_t.is_done()) {
+                m_enemies.push_back(Trash::create_random(m_bg.container));
 
-        for (int i = 0; i < m_enemies.size(); i++) {
-            auto& enemy{m_enemies[i]};
+                enemy_spawn_t.reset();
+            }
 
-            if (!enemy.update(dt, m_bg.container)) {
-                m_enemies.erase(m_enemies.begin() + i);
-            } else if (player.is_enemy_colliding(enemy.get_hitbox())) {
-                if (player.is_same_type(enemy)) {
-                    player.modify_points(Math::Operations::ADD,
-                                         enemy.get_value());
-                } else
-                    player.modify_health(Math::Operations::SUB, 1);
+            for (int i = 0; i < m_enemies.size(); i++) {
+                auto& enemy{m_enemies[i]};
 
-                if (!player.is_alive())
-                    m_lost = true;
+                if (!enemy.update(dt, m_bg.container)) {
+                    m_enemies.erase(m_enemies.begin() + i);
+                } else if (player.is_enemy_colliding(enemy.get_hitbox())) {
+                    if (player.is_same_type(enemy)) {
+                        player.modify_points(Math::Operations::ADD,
+                                             enemy.get_value());
+                    } else
+                        player.modify_health(Math::Operations::SUB, 1);
 
-                // It does not work if those 2 lines are inverted.
-                // Why?
-                // enemy.set_visible(false);
-                m_enemies.erase(m_enemies.begin() + i);
+                    if (!player.is_alive())
+                        m_lost = true;
+
+                    // It does not work if those 2 lines are inverted.
+                    // Why?
+                    // enemy.set_visible(false);
+                    m_enemies.erase(m_enemies.begin() + i);
+                }
             }
         }
-    }
 
-    m_sidebar.score.text = TextFormat("Score: %i", player.get_points());
-    m_sidebar.lives.text = TextFormat("HP: %i", player.get_hp());
+        m_sidebar.score.text = TextFormat("Score: %i", player.get_points());
+        m_sidebar.lives.text = TextFormat("HP: %i", player.get_hp());
+    } break;
+
+    default:
+        break;
+    }
+    m_bg.update(dt);
 };
 
 void Game::reset_enemies(const int amount) {
