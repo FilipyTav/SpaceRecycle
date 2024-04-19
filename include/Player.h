@@ -60,6 +60,7 @@ class Player {
 
     MYGETTER(const int, points, m_score);
     MYGETTER(const int, hp, m_health);
+    MYGETTERSETTER(const int, max_hp, m_max_health);
 
     void modify_points(const Math::Operations op, const int amount);
     void modify_health(const Math::Operations op, const int amount);
