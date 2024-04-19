@@ -66,8 +66,16 @@ struct Sidebar {
     void draw(const Player& player);
 };
 
+struct TitleScreen {
+    InfoSquare gamename{Config::General::game_name, BLANK, BLUE, 50};
+
+    void draw() { gamename.draw(); };
+};
+
 class Game {
   private:
+    TitleScreen m_title_screen{};
+
     // The areas on the screen
     // Rlib::Rectangle m_bg{};
     MainBackground m_bg{};

@@ -116,6 +116,7 @@ inline const std::string assets_path = root_path + "assets/";
 
 inline Shy<int> spaceship_size{50, 50};
 
+inline const std::string game_name = "SpaceRecycle";
 } // namespace General
 
 namespace Sprites {

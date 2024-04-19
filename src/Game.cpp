@@ -18,6 +18,13 @@ void Game::update_size(const Rlib::Window& window) {
             this->set_bg_rec({0, 0, static_cast<float>(window.GetWidth()),
                               static_cast<float>(window.GetHeight())});
         }
+
+        // Title screen
+        {
+            m_title_screen.gamename.update_position(
+                {m_bg.container.x + m_bg.container.width / 2,
+                 m_bg.container.y + m_bg.container.height * .20f});
+        }
     } break;
 
     case INSTRUCTIONS:
@@ -118,12 +125,12 @@ void Game::reset_enemies(const int amount) {
 };
 
 void Game::draw(const Player& player) {
-
     switch (m_current_screen) {
         using enum General::GameScreen;
 
     case TITLE:
         m_bg.container.Draw(BLACK);
+        m_title_screen.draw();
         break;
 
     case INSTRUCTIONS:
