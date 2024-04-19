@@ -26,9 +26,10 @@ void Player::correct_position(const Rlib::Rectangle& bounds, const Axis axis) {
 /* ---------- Public methods ---------- */
 
 Player::Player(const Rlib::Rectangle& hitbox, const TrashInfo::Type type,
-               const float speed, const int health)
-    : m_hitbox{hitbox}, speed{speed}, m_type{type}, m_health{health} {
+               const float speed, const int max_health)
+    : m_hitbox{hitbox}, speed{speed}, m_type{type}, m_max_health{max_health} {
     m_color = TrashInfo::colors_map[type];
+    this->reset();
 };
 
 void Player::update(const Rlib::Rectangle& bounds) {
@@ -175,9 +176,9 @@ void Player::modify_health(const Math::Operations op, const int amount) {
 
 bool Player::is_alive() { return m_health > 0; };
 
-void Player::reset(const int health) {
+void Player::reset() {
     m_score = 0;
-    m_health = health;
+    m_health = m_max_health;
 };
 
 void Player::place_in_middle(const Rlib::Rectangle bounds) {

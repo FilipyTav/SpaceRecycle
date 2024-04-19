@@ -23,6 +23,7 @@ class Player {
     int m_score{0};
 
     int m_health{};
+    int m_max_health{};
 
   public:
     Player(const Rlib::Rectangle& hitbox, const TrashInfo::Type type,
@@ -65,7 +66,7 @@ class Player {
 
     bool is_alive();
 
-    void reset(const int health = 3);
+    void reset();
 
     void place_in_middle(const Rlib::Rectangle bounds);
 
