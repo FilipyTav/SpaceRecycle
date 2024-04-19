@@ -18,6 +18,7 @@ int main() {
     Game game{};
     game.update_size(window);
     game.reset();
+    game.set_current_screen(General::GameScreen::TITLE);
 
     Player spaceship{{0, 0,
                       static_cast<float>(Config::General::spaceship_size.x),
@@ -49,25 +50,42 @@ int main() {
         // Update
         //----------------------------------------------------------------------------------
         {
-            if (window.IsResized()) {
-                // Corrects positioning anomalies when resizing
-                game.update_size(window);
-                spaceship.update_position(game.get_bg_rec());
+            switch (game.get_current_screen()) {
+                using enum General::GameScreen;
+            case TITLE:
+                break;
 
-                game.set_paused(true);
+            case INSTRUCTIONS:
+                break;
+
+            case GAMEPLAY: {
+                if (window.IsResized()) {
+                    // Corrects positioning anomalies when resizing
+                    game.update_size(window);
+                    spaceship.update_position(game.get_bg_rec());
+
+                    game.set_paused(true);
+                }
+
+                if (!game.is_paused()) {
+                    dt = GetFrameTime();
+
+                    game.update(dt, spaceship);
+
+                    spaceship.update(game.get_bg_rec());
+                    spaceship.handle_input(game.get_bg_rec(), dt);
+                }
+
+                if (game.did_lose())
+                    game.set_paused(true);
+            } break;
+
+            default:
+                break;
             }
 
-            if (!game.is_paused()) {
-                dt = GetFrameTime();
-
-                game.update(dt, spaceship);
-
-                spaceship.update(game.get_bg_rec());
-                spaceship.handle_input(game.get_bg_rec(), dt);
-            }
-
-            if (game.did_lose())
-                game.set_paused(true);
+            if (IsKeyPressed(KEY_SPACE))
+                game.set_current_screen(General::GameScreen::GAMEPLAY);
         }
         //----------------------------------------------------------------------------------
 
@@ -76,32 +94,45 @@ int main() {
         {
             window.BeginDrawing();
 
+            switch (game.get_current_screen()) {
+                using enum General::GameScreen;
+            case TITLE:
+                break;
+
+            case INSTRUCTIONS:
+                break;
+
+            case GAMEPLAY: {
+                game.draw(spaceship);
+
+                spaceship.draw();
+
+                if (exit_request) {
+                    DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);
+                    message << "Are you sure you want to exit? [Y/N]";
+                    show_message = true;
+                } else if (game.did_lose()) {
+                    DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);
+                    message << "You lost! Wanna try again? [Y/N]";
+                    show_message = true;
+                } else if (game.is_paused()) {
+                    DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);
+                    message << "Paused! Press P to unpause";
+                    show_message = true;
+                }
+
+                if (show_message) {
+                    DrawText(message.str().c_str(), 40, 180, 30, WHITE);
+
+                    show_message = false;
+                    message.str("");
+                }
+            } break;
+
+            default:
+                break;
+            }
             window.ClearBackground(RAYWHITE);
-
-            game.draw(spaceship);
-
-            spaceship.draw();
-
-            if (exit_request) {
-                DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);
-                message << "Are you sure you want to exit? [Y/N]";
-                show_message = true;
-            } else if (game.did_lose()) {
-                DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);
-                message << "You lost! Wanna try again? [Y/N]";
-                show_message = true;
-            } else if (game.is_paused()) {
-                DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);
-                message << "Paused! Press P to unpause";
-                show_message = true;
-            }
-
-            if (show_message) {
-                DrawText(message.str().c_str(), 40, 180, 30, WHITE);
-
-                show_message = false;
-                message.str("");
-            }
 
             window.EndDrawing();
         }

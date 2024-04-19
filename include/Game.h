@@ -73,6 +73,8 @@ class Game {
     MainBackground m_bg{};
     Sidebar m_sidebar{};
 
+    General::GameScreen m_current_screen{};
+
     // State
     bool m_lost{};
     bool m_won{};
@@ -98,6 +100,7 @@ class Game {
     void set_sidebar_rec(const Rlib ::Rectangle& value);
 
     MYSETTER(const bool, paused, m_paused);
+    MYGETTERSETTER(const General::GameScreen, current_screen, m_current_screen);
 
     const bool is_paused();
 

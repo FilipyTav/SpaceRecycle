@@ -115,6 +115,7 @@ inline const std::string root_path =
 inline const std::string assets_path = root_path + "assets/";
 
 inline Shy<int> spaceship_size{50, 50};
+
 } // namespace General
 
 namespace Sprites {
@@ -139,6 +140,10 @@ enum class Operations {
 
     MAX_OPERATIONS,
 };
+}
+
+namespace General {
+enum class GameScreen { TITLE, INSTRUCTIONS, GAMEPLAY, MAX_SCREENS };
 }
 
 inline Shy<float> get_middle_rec(const Rlib::Rectangle& rec) {
