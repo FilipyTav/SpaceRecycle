@@ -106,10 +106,17 @@ struct Sidebar {
         score.draw();
 
         for (int i = 0; i < player.get_max_hp(); i++) {
-            lives.draw(1);
+            // 0 = empty heart
+            // 1 = full heart
+            if (i < player.get_hp())
+                lives.draw(1);
+            else
+                lives.draw(0);
+
             lives.update_position({lives.rec.x + lives.rec.width, lives.rec.y});
         }
 
+        // Resets the rec to its original position
         lives.update_position(
             {lives.rec.x - player.get_max_hp() * lives.rec.width, lives.rec.y});
     };
