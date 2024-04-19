@@ -82,6 +82,7 @@ void Game::update(const float dt, Player& player) {
 };
 
 void Game::reset_enemies(const int amount) {
+    m_enemies.clear();
     m_enemies.reserve(amount);
     m_enemies.resize(1, {Trash::create_random(m_bg.container)});
 
@@ -152,4 +153,84 @@ void Game::handle_input(const Rlib::Window& window, bool* exit_request,
         if (IsKeyPressed(KEY_P))
             this->set_paused(!this->is_paused());
     }
+};
+
+/* ---------- InfoSquare methods ---------- */
+InfoSquare::InfoSquare(const std::string path, Shy<int> spritesheet_size,
+                       const Rlib::Color bg)
+    : bg{bg} {
+    spritesheet = SpriteSheet{path, spritesheet_size};
+    is_sprite = true;
+};
+
+InfoSquare::InfoSquare(const std::string_view text, const Rlib::Color bg,
+                       const Rlib::Color fg, const int font_size)
+    : text{text}, bg{bg}, fg{fg}, font_size{font_size} {
+    is_sprite = false;
+};
+
+void InfoSquare::update_position(Shy<float> position, Shy<float> size) {
+    if (!size) {
+        size = {rec.width, rec.height};
+    }
+
+    rec = Rlib::Rectangle{{position.x, position.y}, {size.x, size.y}};
+};
+
+void InfoSquare::draw(const int sprite_index) {
+    rec.Draw(bg);
+
+    if (is_sprite)
+        spritesheet.draw(rec, sprite_index);
+    else
+        DrawText(
+            text.c_str(),
+            // Center text
+            (rec.x + (rec.width - MeasureText(text.c_str(), font_size)) / 2.f),
+            (rec.y + (rec.height - font_size) / 2.f), font_size, fg);
+};
+
+/* ---------- MainBackground methods ---------- */
+MainBackground::MainBackground() { stars_timer.start(.3); };
+
+void MainBackground::draw() {
+    container.Draw(color);
+    for (auto& star : stars) {
+        star.draw();
+    }
+};
+
+void MainBackground::update(const float dt) {
+    for (int i = 0; i < stars.size(); i++) {
+        stars[i].update(dt);
+
+        if (!is_rec_inside(container, stars[i].rec))
+            stars.erase(stars.begin() + i);
+    }
+
+    if (stars_timer.is_done()) {
+        stars.push_back(Star::create_random(container));
+        stars_timer.reset();
+    }
+};
+
+/* ---------- Sidebar methods ---------- */
+void Sidebar::draw(const Player& player) {
+    container.Draw(GRAY);
+    score.draw();
+
+    for (int i = 0; i < player.get_max_hp(); i++) {
+        // 0 = empty heart
+        // 1 = full heart
+        if (i < player.get_hp())
+            lives.draw(1);
+        else
+            lives.draw(0);
+
+        lives.update_position({lives.rec.x + lives.rec.width, lives.rec.y});
+    }
+
+    // Resets the rec to its original position
+    lives.update_position(
+        {lives.rec.x - player.get_max_hp() * lives.rec.width, lives.rec.y});
 };
