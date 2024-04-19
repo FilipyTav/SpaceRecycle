@@ -103,7 +103,7 @@ struct TitleScreen {
         exit_btn.draw();
     };
 
-    General::GameScreen update(const Rlib::Vector2& mouse) {
+    General::GameScreen update(const Rlib::Vector2& mouse, bool* game_running) {
         General::GameScreen screen{};
 
         play_btn.handle_input(mouse);
@@ -115,6 +115,7 @@ struct TitleScreen {
         } else if (instructions_btn.is_activated()) {
             screen = General::GameScreen::INSTRUCTIONS;
         } else if (exit_btn.is_activated()) {
+            *game_running = false;
         }
 
         return screen;
@@ -175,7 +176,8 @@ class Game {
 
     void update_size(const Rlib::Window& window);
 
-    void update(const float dt, Player& player, const Rlib::Window& window);
+    void update(const float dt, Player& player, const Rlib::Window& window,
+                bool* game_running);
 
     void reset_enemies(const int amount);
 

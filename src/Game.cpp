@@ -99,12 +99,13 @@ bool Game::did_lose() { return m_lost; };
 
 bool Game::did_win() { return m_won; };
 
-void Game::update(const float dt, Player& player, const Rlib::Window& window) {
+void Game::update(const float dt, Player& player, const Rlib::Window& window,
+                  bool* game_running) {
     switch (m_current_screen) {
         using enum General::GameScreen;
     case TITLE: {
-        this->set_current_screen(m_title_screen.update(GetMousePosition()),
-                                 window);
+        this->set_current_screen(
+            m_title_screen.update(GetMousePosition(), game_running), window);
     } break;
 
     case INSTRUCTIONS:
