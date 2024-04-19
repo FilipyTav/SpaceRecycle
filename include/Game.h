@@ -61,6 +61,7 @@ struct Sidebar {
     InfoSquare score{"", DARKBLUE, WHITE, 30};
     InfoSquare lives{
         Config::General::assets_path + "images/hearts.png", {2, 1}, BLANK};
+    InfoSquare lives_text{"Lives: ", DARKBLUE, WHITE, 30};
 
     void draw(const Player& player);
 };
