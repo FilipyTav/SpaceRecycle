@@ -8,40 +8,62 @@ Game::Game() {
 };
 
 void Game::update_size(const Rlib::Window& window) {
-    // Main background
-    {
-        this->set_bg_rec({0, 0, static_cast<float>(window.GetWidth() * .70),
-                          static_cast<float>(window.GetHeight())});
-    }
+    switch (m_current_screen) {
+        using enum General::GameScreen;
 
-    // Sidebar
-    {
-        this->set_sidebar_rec({m_bg.container.x + m_bg.container.width, 0,
-                               static_cast<float>(window.GetWidth() * .30),
-                               static_cast<float>(window.GetHeight())});
+    case TITLE: {
+        // Main background
+        // Needs to be set, otherwise it will cause a segfault
+        {
+            this->set_bg_rec({0, 0, static_cast<float>(window.GetWidth()),
+                              static_cast<float>(window.GetHeight())});
+        }
+    } break;
 
-        m_sidebar.score.update_position(
-            {m_sidebar.container.x + (m_sidebar.container.width * .05f),
-             m_sidebar.container.GetHeight() * .10f},
-            {m_sidebar.container.width * .90f,
-             m_sidebar.score.font_size * 1.5f});
+    case INSTRUCTIONS:
+        break;
 
-        m_sidebar.lives_text.update_position(
-            {m_sidebar.container.x + (m_sidebar.container.width * .05f),
-             window.GetHeight() * .30f},
-            {m_sidebar.container.width * .90f,
-             m_sidebar.lives_text.font_size * 1.5f});
+    case GAMEPLAY: {
+        // Sidebar
+        {
+            this->set_sidebar_rec({m_bg.container.x + m_bg.container.width, 0,
+                                   static_cast<float>(window.GetWidth() * .30),
+                                   static_cast<float>(window.GetHeight())});
 
-        m_sidebar.lives.update_position(
-            {m_sidebar.container.x + (m_sidebar.container.width * .05f),
-             window.GetHeight() * .40f},
-            Config::Sprites::hearts_size);
-    }
+            m_sidebar.score.update_position(
+                {m_sidebar.container.x + (m_sidebar.container.width * .05f),
+                 m_sidebar.container.GetHeight() * .10f},
+                {m_sidebar.container.width * .90f,
+                 m_sidebar.score.font_size * 1.5f});
 
-    for (Trash& trash : m_enemies) {
-        trash.correct_position(Orientation::Axis::HORIZONTAL, m_bg.container);
-        // trash.correct_position(Orientation::Axis::VERTICAL,
-        // m_bg_rec.container);
+            m_sidebar.lives_text.update_position(
+                {m_sidebar.container.x + (m_sidebar.container.width * .05f),
+                 window.GetHeight() * .30f},
+                {m_sidebar.container.width * .90f,
+                 m_sidebar.lives_text.font_size * 1.5f});
+
+            m_sidebar.lives.update_position(
+                {m_sidebar.container.x + (m_sidebar.container.width * .05f),
+                 window.GetHeight() * .40f},
+                Config::Sprites::hearts_size);
+        }
+
+        // Main background
+        {
+            this->set_bg_rec({0, 0, static_cast<float>(window.GetWidth() * .70),
+                              static_cast<float>(window.GetHeight())});
+        }
+
+        for (Trash& trash : m_enemies) {
+            trash.correct_position(Orientation::Axis::HORIZONTAL,
+                                   m_bg.container);
+            // trash.correct_position(Orientation::Axis::VERTICAL,
+            // m_bg_rec.container);
+        }
+    } break;
+
+    default:
+        break;
     }
 };
 

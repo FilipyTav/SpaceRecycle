@@ -50,6 +50,11 @@ int main() {
         // Update
         //----------------------------------------------------------------------------------
         {
+            if (window.IsResized()) {
+                // Corrects positioning anomalies when resizing
+                game.update_size(window);
+            }
+
             switch (game.get_current_screen()) {
                 using enum General::GameScreen;
             case TITLE:
@@ -61,7 +66,7 @@ int main() {
             case GAMEPLAY: {
                 if (window.IsResized()) {
                     // Corrects positioning anomalies when resizing
-                    game.update_size(window);
+                    // game.update_size(window);
                     spaceship.update_position(game.get_bg_rec());
 
                     game.set_paused(true);
