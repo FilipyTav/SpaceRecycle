@@ -26,9 +26,15 @@ void Game::update_size(const Rlib::Window& window) {
             {m_sidebar.container.width * .90f,
              m_sidebar.score.font_size * 1.5f});
 
-        m_sidebar.lives.update_position(
+        m_sidebar.lives_text.update_position(
             {m_sidebar.container.x + (m_sidebar.container.width * .05f),
              window.GetHeight() * .30f},
+            {m_sidebar.container.width * .90f,
+             m_sidebar.lives_text.font_size * 1.5f});
+
+        m_sidebar.lives.update_position(
+            {m_sidebar.container.x + (m_sidebar.container.width * .05f),
+             window.GetHeight() * .40f},
             Config::Sprites::hearts_size);
     }
 
@@ -218,6 +224,7 @@ void MainBackground::update(const float dt) {
 void Sidebar::draw(const Player& player) {
     container.Draw(GRAY);
     score.draw();
+    lives_text.draw();
 
     for (int i = 0; i < player.get_max_hp(); i++) {
         // 0 = empty heart
