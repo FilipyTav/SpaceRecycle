@@ -151,11 +151,19 @@ struct TitleScreen {
 };
 
 struct InstructionsScreen {
-    InfoSquare bg{"", YELLOW, WHITE, 30};
+    InfoSquare bg{"", DARKGRAY, WHITE, 30};
     InfoSquare close_btn{"", RED, BLANK, 40};
 
-    InfoSquare controls{"W ou SETA_CIMA: CIMA\nS ou SETA_BAIXO: BAIXO", BLUE,
-                        WHITE, 30};
+    InfoSquare controls{"W: CIMA\n\nA: ESQUERDA\n\n"
+                        "S: BAIXO\n\nD: DIREITA",
+                        BLANK, WHITE, 20};
+
+    InfoSquare types{"1: Papel(Azul)\n\n"
+                     "2: Vidro(Verde)\n\n"
+                     "3: Plástico(Vermelho)\n\n"
+                     "4: Metal(Amarelo)\n\n"
+                     "5: Orgânico(Marrom)\n\n",
+                     BLANK, WHITE, 20};
 
     General::GameScreen update(const Rlib::Vector2& mouse) {
         General::GameScreen screen{};
@@ -174,7 +182,9 @@ struct InstructionsScreen {
     void draw() {
         bg.draw();
         close_btn.draw();
-        //
+
+        controls.draw();
+        types.draw();
     };
 };
 

@@ -54,7 +54,7 @@ void Game::update_size(const Rlib::Window& window) {
         // Bounds
         {
             m_inst_screen.bg.set_size(
-                {window.GetWidth() / 2.f, window.GetHeight() / 3.f});
+                {window.GetWidth() * .75f, window.GetHeight() * .80f});
             m_inst_screen.bg.update_position(
                 {window.GetWidth() / 2.f - m_inst_screen.bg.rec.width / 2,
                  window.GetHeight() / 2.f - m_inst_screen.bg.rec.height / 2});
@@ -69,6 +69,21 @@ void Game::update_size(const Rlib::Window& window) {
                 {m_inst_screen.bg.rec.x + m_inst_screen.bg.rec.width -
                      m_inst_screen.close_btn.rec.width,
                  m_inst_screen.bg.rec.y});
+        }
+
+        // Main info
+        {
+            m_inst_screen.controls.font_size = window.GetHeight() * .05f;
+            m_inst_screen.controls.update_position(
+                {m_inst_screen.bg.rec.x + m_inst_screen.bg.rec.width / 2,
+                 m_inst_screen.bg.rec.y + (m_inst_screen.bg.rec.height / 2) -
+                     m_inst_screen.bg.rec.height * .40f});
+
+            m_inst_screen.types.font_size = window.GetHeight() * .05f;
+            m_inst_screen.types.update_position(
+                {m_inst_screen.bg.rec.x + m_inst_screen.bg.rec.width / 2,
+                 m_inst_screen.bg.rec.y + (m_inst_screen.bg.rec.height / 2) +
+                     m_inst_screen.bg.rec.height * .10f});
         }
         break;
 
