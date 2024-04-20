@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "Mouse.hpp"
 #include "Utils/Globals.h"
 #include <raylib.h>
 
@@ -124,6 +125,7 @@ void Game::update(const float dt, Player& player, const Rlib::Window& window,
     } break;
 
     case INSTRUCTIONS:
+        this->set_current_screen(m_inst_screen.update(GetMousePosition()));
         break;
 
     case GAMEPLAY: {

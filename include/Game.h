@@ -157,6 +157,20 @@ struct InstructionsScreen {
     InfoSquare controls{"W ou SETA_CIMA: CIMA\nS ou SETA_BAIXO: BAIXO", BLUE,
                         WHITE, 30};
 
+    General::GameScreen update(const Rlib::Vector2& mouse) {
+        General::GameScreen screen{};
+
+        close_btn.handle_input(mouse);
+
+        if (close_btn.is_activated()) {
+            screen = General::GameScreen::TITLE;
+        } else {
+            screen = General::GameScreen::INSTRUCTIONS;
+        }
+
+        return screen;
+    };
+
     void draw() {
         bg.draw();
         close_btn.draw();
