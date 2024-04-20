@@ -150,9 +150,24 @@ struct TitleScreen {
     };
 };
 
+struct InstructionsScreen {
+    InfoSquare bg{"", YELLOW, WHITE, 30};
+    InfoSquare close_btn{"", RED, BLANK, 40};
+
+    InfoSquare controls{"W ou SETA_CIMA: CIMA\nS ou SETA_BAIXO: BAIXO", BLUE,
+                        WHITE, 30};
+
+    void draw() {
+        bg.draw();
+        close_btn.draw();
+        //
+    };
+};
+
 class Game {
   private:
     TitleScreen m_title_screen{};
+    InstructionsScreen m_inst_screen{};
 
     // The areas on the screen
     // Rlib::Rectangle m_bg{};

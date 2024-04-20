@@ -50,6 +50,25 @@ void Game::update_size(const Rlib::Window& window) {
     } break;
 
     case INSTRUCTIONS:
+        // Bounds
+        {
+            m_inst_screen.bg.set_size(
+                {window.GetWidth() / 2.f, window.GetHeight() / 3.f});
+            m_inst_screen.bg.update_position(
+                {window.GetWidth() / 2.f - m_inst_screen.bg.rec.width / 2,
+                 window.GetHeight() / 2.f - m_inst_screen.bg.rec.height / 2});
+        }
+
+        // Buttons
+        {
+            m_inst_screen.close_btn.set_size(
+                {static_cast<float>(m_inst_screen.bg.font_size),
+                 static_cast<float>(m_inst_screen.bg.font_size)});
+            m_inst_screen.close_btn.update_position(
+                {m_inst_screen.bg.rec.x + m_inst_screen.bg.rec.width -
+                     m_inst_screen.close_btn.rec.width,
+                 m_inst_screen.bg.rec.y});
+        }
         break;
 
     case GAMEPLAY: {
@@ -167,6 +186,7 @@ void Game::draw(const Player& player) {
         break;
 
     case INSTRUCTIONS:
+        m_inst_screen.draw();
         break;
 
     case GAMEPLAY: {

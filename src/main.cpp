@@ -68,6 +68,7 @@ int main() {
                 break;
 
             case INSTRUCTIONS:
+                game.update(dt, spaceship, window, &running);
                 break;
 
             case GAMEPLAY: {
@@ -111,6 +112,7 @@ int main() {
                 break;
 
             case INSTRUCTIONS:
+                game.draw(spaceship);
                 break;
 
             case GAMEPLAY: {
