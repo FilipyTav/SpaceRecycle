@@ -50,6 +50,11 @@ int main() {
         // Update
         //----------------------------------------------------------------------------------
         {
+
+            if (!game.is_paused()) {
+                dt = GetFrameTime();
+            }
+
             if (window.IsResized()) {
                 // Corrects positioning anomalies when resizing
                 game.update_size(window);
@@ -75,8 +80,6 @@ int main() {
                 }
 
                 if (!game.is_paused()) {
-                    dt = GetFrameTime();
-
                     game.update(dt, spaceship, window, &running);
 
                     spaceship.update(game.get_bg_rec());

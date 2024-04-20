@@ -46,6 +46,7 @@ void Game::update_size(const Rlib::Window& window) {
                      m_title_screen.exit_btn.rec.width / 2,
                  m_title_screen.instructions_btn.rec.y + 80});
         }
+
     } break;
 
     case INSTRUCTIONS:
@@ -104,8 +105,10 @@ void Game::update(const float dt, Player& player, const Rlib::Window& window,
     switch (m_current_screen) {
         using enum General::GameScreen;
     case TITLE: {
-        this->set_current_screen(
-            m_title_screen.update(GetMousePosition(), game_running), window);
+        this->set_current_screen(m_title_screen.update(GetMousePosition(),
+                                                       game_running, dt,
+                                                       m_bg.container),
+                                 window);
     } break;
 
     case INSTRUCTIONS:
@@ -285,7 +288,7 @@ void InfoSquare::set_size(Shy<float> size) {
 };
 
 /* ---------- MainBackground methods ---------- */
-MainBackground::MainBackground() { stars_timer.start(.3); };
+MainBackground::MainBackground(){};
 
 void MainBackground::draw() {
     container.Draw(color);

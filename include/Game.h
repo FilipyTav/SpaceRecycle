@@ -96,26 +96,54 @@ struct TitleScreen {
     InfoSquare instructions_btn{"Controls", BLUE, WHITE, 30};
     InfoSquare exit_btn{"Exit", RED, WHITE, 30};
 
+    std::vector<Star> stars{};
+    Timer stars_timer{1};
+
+    TitleScreen() { stars_timer.start(.3); };
+
     void draw() {
         gamename.draw();
         play_btn.draw();
         instructions_btn.draw();
         exit_btn.draw();
+
+        for (auto& star : stars) {
+            star.draw();
+        }
     };
 
-    General::GameScreen update(const Rlib::Vector2& mouse, bool* game_running) {
+    General::GameScreen update(const Rlib::Vector2& mouse, bool* game_running,
+                               const float dt, const Rlib::Rectangle& bounds) {
         General::GameScreen screen{};
 
-        play_btn.handle_input(mouse);
-        instructions_btn.handle_input(mouse);
-        exit_btn.handle_input(mouse);
+        // Buttons
+        {
+            play_btn.handle_input(mouse);
+            instructions_btn.handle_input(mouse);
+            exit_btn.handle_input(mouse);
 
-        if (play_btn.is_activated()) {
-            screen = General::GameScreen::GAMEPLAY;
-        } else if (instructions_btn.is_activated()) {
-            screen = General::GameScreen::INSTRUCTIONS;
-        } else if (exit_btn.is_activated()) {
-            *game_running = false;
+            if (play_btn.is_activated()) {
+                screen = General::GameScreen::GAMEPLAY;
+            } else if (instructions_btn.is_activated()) {
+                screen = General::GameScreen::INSTRUCTIONS;
+            } else if (exit_btn.is_activated()) {
+                *game_running = false;
+            }
+        }
+
+        // Stars
+        {
+            for (int i = 0; i < stars.size(); i++) {
+                stars[i].update(dt);
+
+                if (!is_rec_inside(bounds, stars[i].rec))
+                    stars.erase(stars.begin() + i);
+            }
+
+            if (stars_timer.is_done()) {
+                stars.push_back(Star::create_random(bounds));
+                stars_timer.reset();
+            }
         }
 
         return screen;

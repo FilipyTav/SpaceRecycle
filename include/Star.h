@@ -2,6 +2,7 @@
 
 #include "Utils/Globals.h"
 #include "Utils/Random.h"
+#include <iostream>
 
 struct Star {
     Rlib::Rectangle rec{};
