@@ -253,5 +253,5 @@ class Game {
     void reset();
 
     void handle_input(const Rlib::Window& window, bool* exit_request,
-                      bool* running, Player& spaceship);
+                      bool* menu_request, bool* running, Player& spaceship);
 };

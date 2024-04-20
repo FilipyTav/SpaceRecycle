@@ -31,13 +31,15 @@ int main() {
     // FPS cap
     window.SetTargetFPS(60);
 
-    window.SetExitKey(KEY_ESCAPE);
+    window.SetExitKey(KEY_Q);
 
     // Delta time
     float dt{};
 
     std::stringstream message{};
     bool show_message{false};
+
+    bool menu_request{false};
     //--------------------------------------------------------------------------------------
 
     // Game loop switch flag
@@ -45,7 +47,8 @@ int main() {
     bool exit_request{false};
 
     while (running) {
-        game.handle_input(window, &exit_request, &running, spaceship);
+        game.handle_input(window, &exit_request, &menu_request, &running,
+                          spaceship);
 
         // Update
         //----------------------------------------------------------------------------------
@@ -127,6 +130,10 @@ int main() {
                 } else if (game.did_lose()) {
                     DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);
                     message << "You lost! Wanna try again? [Y/N]";
+                    show_message = true;
+                } else if (menu_request) {
+                    DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);
+                    message << "Quer voltar ao menu? [Y/N]";
                     show_message = true;
                 } else if (game.is_paused()) {
                     DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);
