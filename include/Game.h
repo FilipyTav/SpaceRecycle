@@ -7,6 +7,7 @@
 #include "Utils/Globals.h"
 #include "Utils/Timer.h"
 #include <algorithm>
+#include <cstdlib>
 #include <iostream>
 #include <raylib-cpp.hpp>
 #include <raylib.h>
@@ -25,6 +26,9 @@ struct InfoSquare {
 
     SpriteSheet spritesheet{};
 
+    enum State { NORMAL, HOVER, PRESSED, ACTIVATED, MAX_STATES };
+    State state{NORMAL};
+
     // As sprite
     InfoSquare(const std::string path, Shy<int> spritesheet_size,
                const Rlib::Color bg);
@@ -36,7 +40,27 @@ struct InfoSquare {
     // @param size = in pixels
     void update_position(Shy<float> position, Shy<float> size = {});
 
+    void set_size(Shy<float> size);
+
     void draw(const int sprite_index = -1);
+
+    int text_size() const { return MeasureText(text.c_str(), font_size); };
+
+    void handle_input(const Rlib::Vector2& mouse) {
+        // Check button state
+        if (rec.CheckCollision(mouse)) {
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+                state = PRESSED;
+            else
+                state = HOVER;
+
+            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
+                state = ACTIVATED;
+        } else
+            state = NORMAL;
+    };
+
+    bool is_activated() { return state == ACTIVATED; };
 };
 
 struct MainBackground {
@@ -66,12 +90,76 @@ struct Sidebar {
     void draw(const Player& player);
 };
 
+struct TitleScreen {
+    InfoSquare gamename{Config::General::game_name, BLANK, BLUE, 50};
+    InfoSquare play_btn{"Play", BLUE, WHITE, 30};
+    InfoSquare instructions_btn{"Controls", BLUE, WHITE, 30};
+    InfoSquare exit_btn{"Exit", RED, WHITE, 30};
+
+    std::vector<Star> stars{};
+    Timer stars_timer{1};
+
+    TitleScreen() { stars_timer.start(.3); };
+
+    void draw() {
+        gamename.draw();
+        play_btn.draw();
+        instructions_btn.draw();
+        exit_btn.draw();
+
+        for (auto& star : stars) {
+            star.draw();
+        }
+    };
+
+    General::GameScreen update(const Rlib::Vector2& mouse, bool* game_running,
+                               const float dt, const Rlib::Rectangle& bounds) {
+        General::GameScreen screen{};
+
+        // Buttons
+        {
+            play_btn.handle_input(mouse);
+            instructions_btn.handle_input(mouse);
+            exit_btn.handle_input(mouse);
+
+            if (play_btn.is_activated()) {
+                screen = General::GameScreen::GAMEPLAY;
+            } else if (instructions_btn.is_activated()) {
+                screen = General::GameScreen::INSTRUCTIONS;
+            } else if (exit_btn.is_activated()) {
+                *game_running = false;
+            }
+        }
+
+        // Stars
+        {
+            for (int i = 0; i < stars.size(); i++) {
+                stars[i].update(dt);
+
+                if (!is_rec_inside(bounds, stars[i].rec))
+                    stars.erase(stars.begin() + i);
+            }
+
+            if (stars_timer.is_done()) {
+                stars.push_back(Star::create_random(bounds));
+                stars_timer.reset();
+            }
+        }
+
+        return screen;
+    };
+};
+
 class Game {
   private:
+    TitleScreen m_title_screen{};
+
     // The areas on the screen
     // Rlib::Rectangle m_bg{};
     MainBackground m_bg{};
     Sidebar m_sidebar{};
+
+    General::GameScreen m_current_screen{};
 
     // State
     bool m_lost{};
@@ -98,6 +186,13 @@ class Game {
     void set_sidebar_rec(const Rlib ::Rectangle& value);
 
     MYSETTER(const bool, paused, m_paused);
+    MYGETTERSETTER(const General::GameScreen, current_screen, m_current_screen);
+
+    void set_current_screen(const General ::GameScreen value,
+                            const Rlib::Window& window) {
+        this->set_current_screen(value);
+        this->update_size(window);
+    };
 
     const bool is_paused();
 
@@ -109,7 +204,8 @@ class Game {
 
     void update_size(const Rlib::Window& window);
 
-    void update(const float dt, Player& player);
+    void update(const float dt, Player& player, const Rlib::Window& window,
+                bool* game_running);
 
     void reset_enemies(const int amount);
 
