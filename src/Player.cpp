@@ -227,11 +227,13 @@ void Player::place_at_bottom(const Rlib::Rectangle bounds) {
 void Player::draw() {
     // m_sprite_box.Draw(PURPLE);
 
-    // TODO: properly separate sprite and hitbox
-    m_sprites.draw(m_sprite_box, 1);
+    m_sprites.draw(m_sprite_box);
 
     // m_hitbox.Draw(m_color);
 
-    if (m_sprites.is_ready())
+    // Player sprite animation
+    if (m_sprites.is_ready()) {
         m_sprites.rec_advance();
+        m_sprites.reset_frame_counter();
+    }
 };

@@ -17,6 +17,8 @@ struct Shy {
 
 struct SpriteSheet {
     Rlib::Texture2D texture{};
+
+    // Amount of sprites on each axis
     Shy<int> size{};
 
     Rlib::Rectangle sprite_rec{};
@@ -58,14 +60,14 @@ struct SpriteSheet {
     void rec_advance() {
         index = (index + 1) % (size.x * size.y);
 
-        sprite_rec.x += size.x;
+        sprite_rec.x += sprite_rec.width;
 
-        if (sprite_rec.x == texture.width) {
+        if (sprite_rec.x >= texture.width) {
             sprite_rec.x = 0;
-            sprite_rec.y += size.y;
+            sprite_rec.y += sprite_rec.height;
         }
 
-        if (sprite_rec.y == texture.height) {
+        if (sprite_rec.y >= texture.height) {
             sprite_rec.y = 0;
         }
     };
