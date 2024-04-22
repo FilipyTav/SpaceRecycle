@@ -21,8 +21,8 @@ int main() {
     game.set_current_screen(General::GameScreen::TITLE);
 
     Player spaceship{{0, 0,
-                      static_cast<float>(Config::General::spaceship_size.x),
-                      Config::General::spaceship_size.y * 1.5f},
+                      static_cast<float>(Config::General::spaceship_hitbox.x),
+                      static_cast<float>(Config::General::spaceship_hitbox.y)},
                      TrashInfo::Type::METAL};
 
     spaceship.place_in_middle(game.get_bg_rec());

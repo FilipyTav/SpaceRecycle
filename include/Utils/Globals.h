@@ -22,9 +22,14 @@ struct SpriteSheet {
     Rlib::Rectangle sprite_rec{};
     int index{0};
 
+    int frames_speed{};
+    int frame_counter{};
+
     SpriteSheet(){};
 
-    SpriteSheet(const std::string path, const Shy<int> size) : size{size} {
+    SpriteSheet(const std::string path, const Shy<int> size,
+                const int frame_speed = 5)
+        : size{size}, frames_speed{frame_speed} {
         texture.Load(path);
 
         sprite_rec =
@@ -64,6 +69,15 @@ struct SpriteSheet {
             sprite_rec.y = 0;
         }
     };
+
+    bool is_ready() {
+        // 60 fps
+        return frame_counter >= (60 / frames_speed);
+    };
+
+    void update() { frame_counter++; };
+
+    void reset_frame_counter() { frame_counter = 0; };
 
     // @param i = which index to use. < 0 means it should use the internal index
     void draw(const Rlib::Rectangle& dest_rec, int i = -1) const {
@@ -114,7 +128,8 @@ inline const std::string root_path =
 
 inline const std::string assets_path = root_path + "assets/";
 
-inline Shy<int> spaceship_size{50, 50};
+inline Shy<int> spaceship_hitbox{50, 50};
+inline Shy<int> spaceship_size{75, 75};
 
 inline const std::string game_name = "SpaceRecycle";
 } // namespace General

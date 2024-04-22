@@ -1,21 +1,24 @@
 #include "Player.h"
+#include "Utils/Globals.h"
+#include <cstdlib>
 
 /* ---------- Private methods ---------- */
-void Player::correct_position(const Rlib::Rectangle& bounds, const Axis axis) {
+void Player::correct_position(Rlib::Rectangle& rec,
+                              const Rlib::Rectangle& bounds, const Axis axis) {
     switch (axis) {
         using enum Axis;
     case HORIZONTAL:
-        if (m_hitbox.x < bounds.x)
-            m_hitbox.x = bounds.x;
-        else if (m_hitbox.x + m_hitbox.width > bounds.x + bounds.width)
-            m_hitbox.x = bounds.x + bounds.width - m_hitbox.width;
+        if (rec.x < bounds.x)
+            rec.x = bounds.x;
+        else if (rec.x + rec.width > bounds.x + bounds.width)
+            rec.x = bounds.x + bounds.width - rec.width;
         break;
 
     case VERTICAL:
-        if (m_hitbox.y < bounds.y)
-            m_hitbox.y = bounds.y;
-        else if (m_hitbox.y + m_hitbox.height > bounds.y + bounds.height)
-            m_hitbox.y = bounds.y + bounds.height - m_hitbox.height;
+        if (rec.y < bounds.y)
+            rec.y = bounds.y;
+        else if (rec.y + rec.height > bounds.y + bounds.height)
+            rec.y = bounds.y + bounds.height - rec.height;
         break;
 
     default:
@@ -24,17 +27,33 @@ void Player::correct_position(const Rlib::Rectangle& bounds, const Axis axis) {
 };
 
 /* ---------- Public methods ---------- */
-
 Player::Player(const Rlib::Rectangle& hitbox, const TrashInfo::Type type,
                const float speed, const int max_health)
     : m_hitbox{hitbox}, speed{speed}, m_type{type}, m_max_health{max_health} {
     m_color = TrashInfo::colors_map[type];
+    m_sprites = {Config::General::assets_path + "/images/spaceship.png",
+                 {2, 1}};
+    m_sprite_box = Rlib::Rectangle{
+        {m_hitbox.x, m_hitbox.y},
+        {static_cast<float>(Config::General::spaceship_size.x),
+         static_cast<float>(Config::General::spaceship_size.y)}};
     this->reset();
 };
 
 void Player::update(const Rlib::Rectangle& bounds) {
-    this->correct_position(bounds, Axis::HORIZONTAL);
-    this->correct_position(bounds, Axis::VERTICAL);
+    this->correct_position(m_hitbox, bounds, Axis::HORIZONTAL);
+    this->correct_position(m_hitbox, bounds, Axis::VERTICAL);
+
+    m_sprite_box = Rlib::Rectangle{
+        {m_hitbox.x - std::abs(m_sprite_box.width - m_hitbox.width) / 2,
+         m_hitbox.y - std::abs(m_sprite_box.height - m_hitbox.height) / 2},
+        {static_cast<float>(Config::General::spaceship_size.x),
+         static_cast<float>(Config::General::spaceship_size.y)}};
+
+    this->m_sprites.update();
+
+    this->correct_position(m_sprite_box, bounds, Axis::HORIZONTAL);
+    this->correct_position(m_sprite_box, bounds, Axis::VERTICAL);
 };
 
 void Player::update_position(const Rlib::Rectangle& bounds) {
@@ -49,22 +68,22 @@ void Player::move(const Direction direction, const Rlib::Rectangle& bounds,
         using enum Direction;
     case UP:
         m_hitbox.y -= speed * dt;
-        this->correct_position(bounds, Axis::VERTICAL);
+        this->correct_position(m_hitbox, bounds, Axis::VERTICAL);
         break;
 
     case DOWN:
         m_hitbox.y += speed * dt;
-        this->correct_position(bounds, Axis::VERTICAL);
+        this->correct_position(m_hitbox, bounds, Axis::VERTICAL);
         break;
 
     case LEFT:
         m_hitbox.x -= speed * dt;
-        this->correct_position(bounds, Axis::HORIZONTAL);
+        this->correct_position(m_hitbox, bounds, Axis::HORIZONTAL);
         break;
 
     case RIGHT:
         m_hitbox.x += speed * dt;
-        this->correct_position(bounds, Axis::HORIZONTAL);
+        this->correct_position(m_hitbox, bounds, Axis::HORIZONTAL);
         break;
 
     default:
@@ -183,10 +202,10 @@ void Player::reset() {
 
 void Player::place_in_middle(const Rlib::Rectangle bounds) {
     m_hitbox.x =
-        get_middle_rec(bounds).x - Config::General::spaceship_size.x / 2.f;
+        get_middle_rec(bounds).x - Config::General::spaceship_hitbox.x / 2.f;
 
-    m_hitbox.y = get_middle_rec(bounds).y -
-                 (Config::General::spaceship_size.y * 1.5f) / 2.f;
+    m_hitbox.y =
+        get_middle_rec(bounds).y - (Config::General::spaceship_hitbox.y) / 2.f;
 };
 
 bool Player::is_same_type(const Trash& enemy) const {
@@ -203,4 +222,16 @@ bool Player::is_enemy_colliding(const Rlib::Rectangle& enemy_hitbox) const {
 
 void Player::place_at_bottom(const Rlib::Rectangle bounds) {
     m_hitbox.y = bounds.y + bounds.height - m_hitbox.height - 30;
+};
+
+void Player::draw() {
+    // m_sprite_box.Draw(PURPLE);
+
+    // TODO: properly separate sprite and hitbox
+    m_sprites.draw(m_sprite_box, 1);
+
+    // m_hitbox.Draw(m_color);
+
+    if (m_sprites.is_ready())
+        m_sprites.rec_advance();
 };

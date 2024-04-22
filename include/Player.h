@@ -15,23 +15,27 @@ class Player {
     TrashInfo::Type m_type{};
     Rlib::Color m_color{};
 
+    Rlib::Rectangle m_sprite_box{};
     Rlib::Rectangle m_hitbox{};
     MYSETTER(const Rlib::Rectangle, hitbox, m_hitbox);
 
-    void correct_position(const Rlib::Rectangle& bounds, const Axis axis);
+    void correct_position(Rlib::Rectangle& rec, const Rlib::Rectangle& bounds,
+                          const Axis axis);
 
     int m_score{0};
 
     int m_health{};
     int m_max_health{};
 
+    SpriteSheet m_sprites{};
+
   public:
     Player(const Rlib::Rectangle& hitbox, const TrashInfo::Type type,
            const float speed = 400, const int health = 3);
     Player(Player&&) = default;
-    Player(const Player&) = default;
+    Player(const Player&) = delete;
     Player& operator=(Player&&) = default;
-    Player& operator=(const Player&) = default;
+    Player& operator=(const Player&) = delete;
     ~Player() = default;
 
     // In pixels
@@ -45,7 +49,7 @@ class Player {
     void move(const Direction direction, const Rlib::Rectangle& bounds,
               const float dt = 0);
 
-    void draw() const { m_hitbox.Draw(m_color); };
+    void draw();
 
     void set_type(const TrashInfo::Type type);
 
