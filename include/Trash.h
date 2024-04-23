@@ -13,7 +13,6 @@ class Trash {
 
     int y_speed{};
 
-    // TODO:: Change this for the sprite
     Rlib::Color m_color{};
     Rlib::Rectangle m_sprite_box{};
     Rlib::Rectangle m_hitbox{};

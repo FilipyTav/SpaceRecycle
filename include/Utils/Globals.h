@@ -147,11 +147,12 @@ enum class Type {
 inline Shy<int> size{70, 70};
 
 using enum Type;
-inline std::unordered_map<Type, Rlib::Color> colors_map{{PAPER, BLUE},
-                                                        {GLASS, GREEN},
-                                                        {PLASTIC, RED},
-                                                        {METAL, YELLOW},
-                                                        {ORGANIC, BROWN}};
+inline std::unordered_map<Type, Rlib::Color> colors_map{
+    {PAPER, {0, 173, 230}},    // #00adef
+    {GLASS, {0, 166, 82}},     // #00a652
+    {PLASTIC, {237, 27, 36}},  // #ed1b24
+    {METAL, {255, 247, 70}},   // #fff746
+    {ORGANIC, {145, 76, 41}}}; // #914C29
 
 inline std::unordered_map<Type, const int> values_map{
     {PAPER, 1}, {GLASS, 5}, {PLASTIC, 10}, {METAL, 15}, {ORGANIC, 20}};
@@ -165,7 +166,7 @@ inline const std::string root_path =
 inline const std::string assets_path = root_path + "assets/";
 
 inline Shy<int> spaceship_hitbox{50, 50};
-inline Shy<int> spaceship_size{75, 75};
+inline Shy<int> spaceship_size{90, 90};
 
 inline const std::string game_name = "SpaceRecycle";
 } // namespace General

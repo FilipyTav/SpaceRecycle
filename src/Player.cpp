@@ -31,7 +31,7 @@ Player::Player(const Rlib::Rectangle& hitbox, const TrashInfo::Type type,
                const float speed, const int max_health)
     : m_hitbox{hitbox}, speed{speed}, m_type{type}, m_max_health{max_health} {
     m_color = TrashInfo::colors_map[type];
-    m_sprites = {Config::General::assets_path + "/images/spaceship.png",
+    m_sprites = {Config::General::assets_path + "/images/spaceship-outline.png",
                  {2, 1}};
     m_sprite_box = Rlib::Rectangle{
         {m_hitbox.x, m_hitbox.y},
