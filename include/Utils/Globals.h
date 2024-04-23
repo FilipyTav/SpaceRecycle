@@ -3,6 +3,7 @@
 #include <cassert>
 #include <cmath>
 #include <raylib-cpp.hpp>
+#include <raylib.h>
 #include <unordered_map>
 
 namespace Rlib = raylib;
@@ -82,15 +83,42 @@ struct SpriteSheet {
     void reset_frame_counter() { frame_counter = 0; };
 
     // @param i = which index to use. < 0 means it should use the internal index
-    void draw(const Rlib::Rectangle& dest_rec, int i = -1) const {
+    void draw(const Rlib::Rectangle& dest_rec, int i = -1) {
         if (i < 0) {
+            this->change_sprite_color();
             texture.Draw(sprite_rec, dest_rec);
+
+            // DrawTexture(render_texture.texture, dest_rec.x, dest_rec.y,
+            // WHITE);
+
+            // render_texture.GetTexture().Draw();
         } else {
             assert(i >= 0 && i < size.x * size.y &&
                    "SpriteSheet::draw() invalid index");
 
             texture.Draw(this->get_rec_by_index(i), dest_rec);
         }
+    };
+
+    void change_sprite_color() {
+        /*
+         * 2 hours to do this
+         * almost no docs or info about it
+         * also didnt pay attention to the cheatsheet
+         *
+         * See:
+         * https://raylib.handmade.network/forums/t/7285-get_pixel_color_from_texture2d
+         */
+        Rlib::Image a = texture.GetData();
+
+        // Placeholder color
+        Color purple{156, 22, 125, 255};
+        ImageColorReplace(&a, purple, RED);
+
+        // Save changes
+        Color* pixels =
+            LoadImageColors(a); // Load pixel data from image (RGBA 32bit)
+        texture.Update(pixels);
     };
 };
 
