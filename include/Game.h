@@ -213,6 +213,8 @@ class Game {
     // FIX: causes error if I try to initialize here
     SpriteSheet enemies_sprites{};
 
+    Timer m_difficulty_timer{15};
+
   public:
     Game();
     Game(Game&&) = default;

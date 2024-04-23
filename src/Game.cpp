@@ -1,10 +1,12 @@
 #include "Game.h"
 #include "Utils/Globals.h"
+#include <iostream>
 #include <raylib.h>
 
 Game::Game() {
     // 1 seconds between enemy spawns in the beginning
-    enemy_spawn_t.start(1);
+    enemy_spawn_t.start(2);
+    m_difficulty_timer.start(10);
 
     enemies_sprites = {Config::General::assets_path + "/images/trashes.png",
                        {1, 5}};
@@ -154,6 +156,14 @@ void Game::update(const float dt, Player& player, const Rlib::Window& window,
                 enemy_spawn_t.reset();
             }
 
+            if (m_difficulty_timer.is_done()) {
+                m_difficulty_timer.reset();
+                enemy_spawn_t.start(enemy_spawn_t.get_lifetime() - .1);
+
+                std::cout << "Spawn time: " << enemy_spawn_t.get_lifetime()
+                          << '\n';
+            }
+
             for (int i = 0; i < m_enemies.size(); i++) {
                 auto& enemy{m_enemies[i]};
 
@@ -228,6 +238,7 @@ const bool Game::is_paused() { return m_paused; };
 
 void Game::reset() {
     this->reset_enemies(10);
+    m_difficulty_timer.reset();
 
     m_lost = false;
     m_won = false;

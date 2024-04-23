@@ -15,7 +15,10 @@ struct Timer {
   public:
     Timer(const double default_lifetime) : m_reset_value{default_lifetime} {};
 
-    void start(const double life_time) {
+    void start(double life_time) {
+        if (life_time <= 0)
+            life_time = 0;
+
         m_start_time = GetTime();
         m_lifetime = life_time;
 
