@@ -210,6 +210,9 @@ class Game {
     // All the rendered enemies
     std::vector<Trash> m_enemies{};
 
+    // FIX: causes error if I try to initialize here
+    SpriteSheet enemies_sprites{};
+
   public:
     Game();
     Game(Game&&) = default;

@@ -31,7 +31,7 @@ int main() {
     // FPS cap
     window.SetTargetFPS(60);
 
-    window.SetExitKey(KEY_Q);
+    ::SetExitKey(KEY_Q);
 
     // Delta time
     float dt{};

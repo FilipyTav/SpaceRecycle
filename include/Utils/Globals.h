@@ -105,6 +105,7 @@ struct SpriteSheet {
     };
 
     void change_sprite_color(const Rlib::Color color) {
+        SetTraceLogLevel(LOG_NONE);
         /*
          * 2 hours to do this
          * almost no docs or info about it
@@ -122,6 +123,8 @@ struct SpriteSheet {
         Color* pixels =
             LoadImageColors(a); // Load pixel data from image (RGBA 32bit)
         texture.Update(pixels);
+
+        SetTraceLogLevel(LOG_ALL);
     };
 };
 
@@ -141,7 +144,7 @@ enum class Type {
     MAX_TYPES
 };
 
-inline Shy<int> size{50, 50};
+inline Shy<int> size{30, 30};
 
 using enum Type;
 inline std::unordered_map<Type, Rlib::Color> colors_map{{PAPER, BLUE},

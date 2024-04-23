@@ -15,7 +15,6 @@ class Trash {
 
     // TODO:: Change this for the sprite
     Rlib::Color m_color{};
-
     Rlib::Rectangle m_hitbox{};
 
     friend class Game;

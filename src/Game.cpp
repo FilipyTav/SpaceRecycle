@@ -1,11 +1,13 @@
 #include "Game.h"
-#include "Mouse.hpp"
 #include "Utils/Globals.h"
 #include <raylib.h>
 
 Game::Game() {
     // 1 seconds between enemy spawns in the beginning
     enemy_spawn_t.start(1);
+
+    enemies_sprites = {Config::General::assets_path + "/images/trashes.png",
+                       {1, 5}};
 };
 
 void Game::update_size(const Rlib::Window& window) {
@@ -212,6 +214,8 @@ void Game::draw(const Player& player) {
 
         for (auto& enemy : m_enemies) {
             enemy.draw();
+            enemies_sprites.draw(enemy.get_hitbox(),
+                                 static_cast<int>(enemy.get_type()));
         }
     } break;
 
