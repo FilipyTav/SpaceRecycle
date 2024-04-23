@@ -18,6 +18,7 @@ struct Shy {
 
 struct SpriteSheet {
     Rlib::Texture2D texture{};
+    Rlib::Color tex_color{};
 
     // Amount of sprites on each axis
     Shy<int> size{};
@@ -39,6 +40,9 @@ struct SpriteSheet {
             Rlib::Rectangle{{0, 0},
                             {texture.width / static_cast<float>(size.x),
                              texture.height / static_cast<float>(size.y)}};
+
+        // Placeholder color
+        tex_color = Rlib::Color{156, 22, 125, 255};
     };
 
     const Rlib::Rectangle get_rec_by_index(const int index) const {
@@ -83,15 +87,15 @@ struct SpriteSheet {
     void reset_frame_counter() { frame_counter = 0; };
 
     // @param i = which index to use. < 0 means it should use the internal index
-    void draw(const Rlib::Rectangle& dest_rec, int i = -1) {
+    // @param color = Replaces placeholder color with this one
+    void draw(const Rlib::Rectangle& dest_rec, int i = -1,
+              const Rlib::Color color = Rlib::BLANK) {
+        if (color != Rlib::BLANK) {
+            this->change_sprite_color(color);
+        }
+
         if (i < 0) {
-            this->change_sprite_color();
             texture.Draw(sprite_rec, dest_rec);
-
-            // DrawTexture(render_texture.texture, dest_rec.x, dest_rec.y,
-            // WHITE);
-
-            // render_texture.GetTexture().Draw();
         } else {
             assert(i >= 0 && i < size.x * size.y &&
                    "SpriteSheet::draw() invalid index");
@@ -100,7 +104,7 @@ struct SpriteSheet {
         }
     };
 
-    void change_sprite_color() {
+    void change_sprite_color(const Rlib::Color color) {
         /*
          * 2 hours to do this
          * almost no docs or info about it
@@ -111,9 +115,8 @@ struct SpriteSheet {
          */
         Rlib::Image a = texture.GetData();
 
-        // Placeholder color
-        Color purple{156, 22, 125, 255};
-        ImageColorReplace(&a, purple, RED);
+        ImageColorReplace(&a, tex_color, color);
+        tex_color = color;
 
         // Save changes
         Color* pixels =

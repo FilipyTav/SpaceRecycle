@@ -227,7 +227,7 @@ void Player::place_at_bottom(const Rlib::Rectangle bounds) {
 void Player::draw() {
     // m_sprite_box.Draw(PURPLE);
 
-    m_sprites.draw(m_sprite_box);
+    m_sprites.draw(m_sprite_box, -1, m_color);
 
     // m_hitbox.Draw(m_color);
 
