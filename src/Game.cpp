@@ -187,7 +187,7 @@ void Game::update(const float dt, Player& player, const Rlib::Window& window,
             }
         }
 
-        m_sidebar.score.text = TextFormat("Score: %i", player.get_points());
+        m_sidebar.score.text = TextFormat("Pontos: %i", player.get_points());
         m_sidebar.lives.text = TextFormat("HP: %i", player.get_hp());
     } break;
 

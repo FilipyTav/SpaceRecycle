@@ -125,11 +125,13 @@ int main() {
 
                 if (exit_request) {
                     DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);
-                    message << "Are you sure you want to exit? [Y/N]";
+                    // message << "Are you sure you want to exit? [Y/N]";
+                    message << "Quer mesmo sair do jogo? [Y/N]";
                     show_message = true;
                 } else if (game.did_lose()) {
                     DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);
-                    message << "You lost! Wanna try again? [Y/N]";
+                    // message << "You lost! Wanna try again? [Y/N]";
+                    message << "Você perdeu! Quer tentar de novo? [Y/N]";
                     show_message = true;
                 } else if (menu_request) {
                     DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);
@@ -137,7 +139,8 @@ int main() {
                     show_message = true;
                 } else if (game.is_paused()) {
                     DrawRectangle(0, 100, GetRenderWidth(), 200, BLACK);
-                    message << "Paused! Press P to unpause";
+                    // message << "Paused! Press P to unpause";
+                    message << "Pause! Aperte P para voltar ao jogo";
                     show_message = true;
                 }
 

@@ -85,16 +85,16 @@ struct Sidebar {
     InfoSquare score{"", DARKBLUE, WHITE, 30};
     InfoSquare lives{
         Config::General::assets_path + "images/hearts.png", {2, 1}, BLANK};
-    InfoSquare lives_text{"Lives: ", DARKBLUE, WHITE, 30};
+    InfoSquare lives_text{"HP: ", DARKBLUE, WHITE, 30};
 
     void draw(const Player& player);
 };
 
 struct TitleScreen {
     InfoSquare gamename{Config::General::game_name, BLANK, BLUE, 50};
-    InfoSquare play_btn{"Play", BLUE, WHITE, 30};
-    InfoSquare instructions_btn{"Controls", BLUE, WHITE, 30};
-    InfoSquare exit_btn{"Exit", RED, WHITE, 30};
+    InfoSquare play_btn{"Jogar", BLUE, WHITE, 30};
+    InfoSquare instructions_btn{"Controles", BLUE, WHITE, 30};
+    InfoSquare exit_btn{"Sair", RED, WHITE, 30};
 
     std::vector<Star> stars{};
     Timer stars_timer{1};
@@ -158,11 +158,11 @@ struct InstructionsScreen {
                         "S: BAIXO\n\nD: DIREITA",
                         BLANK, WHITE, 20};
 
-    InfoSquare types{"1: Papel(Azul)\n\n"
-                     "2: Vidro(Verde)\n\n"
-                     "3: Plástico(Vermelho)\n\n"
-                     "4: Metal(Amarelo)\n\n"
-                     "5: Orgânico(Marrom)\n\n",
+    InfoSquare types{"1: Papel (Azul)\n\n"
+                     "2: Vidro (Verde)\n\n"
+                     "3: Plástico (Vermelho)\n\n"
+                     "4: Metal (Amarelo)\n\n"
+                     "5: Orgânico (Marrom)\n\n",
                      BLANK, WHITE, 20};
 
     General::GameScreen update(const Rlib::Vector2& mouse) {
