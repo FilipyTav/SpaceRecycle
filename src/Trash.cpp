@@ -1,5 +1,6 @@
 #include "Trash.h"
 #include "Utils/Globals.h"
+#include <cstdlib>
 
 /* ---------- Public methods ---------- */
 Trash::Trash(const Type type, const int speed) : m_type{type}, y_speed{speed} {
@@ -23,6 +24,20 @@ bool Trash::update(const float dt, const Rlib::Rectangle& bounds) {
         m_hitbox.x + m_hitbox.width >= bounds.x + bounds.width)
         return false;
 
+    m_sprite_box.width = TrashInfo::size.x;
+    m_sprite_box.height = TrashInfo::size.y;
+
+    m_hitbox.width = TrashInfo::size.x * .5;
+    m_hitbox.height = TrashInfo::size.y * .5;
+
+    m_sprite_box.x =
+        m_hitbox.x - std::abs(m_hitbox.width - m_sprite_box.width) / 2;
+    m_sprite_box.y =
+        m_hitbox.y - std::abs(m_hitbox.height - m_sprite_box.height) / 2;
+
+    // m_sprite_box.x = m_hitbox.x;
+    // m_sprite_box.y = m_hitbox.y;
+
     return true;
 };
 
@@ -45,8 +60,11 @@ void Trash::correct_position(const Orientation::Axis axis,
 };
 
 void Trash::draw() {
-    if (m_type != Type::MAX_TYPES && m_visible)
-        m_hitbox.Draw(m_color);
+    if (m_type != Type::MAX_TYPES && m_visible) {
+        // Just draw the sprites
+        // m_sprite_box.Draw(PURPLE);
+        // m_hitbox.Draw(m_color);
+    }
 };
 
 Trash Trash::create_random(const Rlib::Rectangle& bounds) {

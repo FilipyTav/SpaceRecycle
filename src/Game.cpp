@@ -214,7 +214,7 @@ void Game::draw(const Player& player) {
 
         for (auto& enemy : m_enemies) {
             enemy.draw();
-            enemies_sprites.draw(enemy.get_hitbox(),
+            enemies_sprites.draw(enemy.get_sprite_box(),
                                  static_cast<int>(enemy.get_type()));
         }
     } break;

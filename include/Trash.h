@@ -15,6 +15,7 @@ class Trash {
 
     // TODO:: Change this for the sprite
     Rlib::Color m_color{};
+    Rlib::Rectangle m_sprite_box{};
     Rlib::Rectangle m_hitbox{};
 
     friend class Game;
@@ -38,6 +39,7 @@ class Trash {
     ~Trash() = default;
 
     MYGETTER(const Rlib::Rectangle&, hitbox, m_hitbox);
+    MYGETTER(const Rlib::Rectangle&, sprite_box, m_sprite_box);
 
     void move(const float dt);
 

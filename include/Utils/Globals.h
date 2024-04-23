@@ -144,7 +144,7 @@ enum class Type {
     MAX_TYPES
 };
 
-inline Shy<int> size{30, 30};
+inline Shy<int> size{70, 70};
 
 using enum Type;
 inline std::unordered_map<Type, Rlib::Color> colors_map{{PAPER, BLUE},
